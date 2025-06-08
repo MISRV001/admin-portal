@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { MockAPIService } from '@/services/mockApiService';
+import { persist } from 'zustand/middleware';
+import { MockAPIService } from '../services/mockApiService';
 
 type UserRole = 'admin' | 'campaign_manager' | 'reports_only';
 
@@ -29,77 +30,88 @@ interface AuthActions {
 
 type AuthStore = AuthState & AuthActions;
 
-export const useAuthStore = create<AuthStore>((set, get) => ({
-  // Initial state
-  user: null,
-  isAuthenticated: false,
-  isLoading: false,
-  error: null,
-  loginStatus: 'idle',
-
-  // Actions
-  login: async (credentials) => {
-    set({ isLoading: true, error: null, loginStatus: 'loading' });
-    
-    try {
-      const mockAPI = MockAPIService.getInstance();
-      const response = await mockAPI.makeRequest('auth/login', credentials);
-      
-      set({ loginStatus: 'success' });
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      set({ 
-        user: response.user, 
-        isAuthenticated: true, 
-        isLoading: false,
-        loginStatus: 'idle'
-      });
-    } catch (error: any) {
-      set({ 
-        error: error.message, 
-        isLoading: false,
-        loginStatus: 'error'
-      });
-      
-      setTimeout(() => {
-        set({ loginStatus: 'idle' });
-      }, 2000);
-      
-      throw error;
-    }
-  },
-
-  logout: () => {
-    set({
-      user: null, 
-      isAuthenticated: false, 
+export const useAuthStore = create<AuthStore>()(
+  persist(
+    (set, get) => ({
+      // Initial state
+      user: null,
+      isAuthenticated: false,
       isLoading: false,
       error: null,
-      loginStatus: 'idle'
-    });
-  },
+      loginStatus: 'idle',
 
-  clearError: () => {
-    set({ error: null });
-  },
+      // Actions
+      login: async (credentials) => {
+        set({ isLoading: true, error: null, loginStatus: 'loading' });
+        
+        try {
+          const mockAPI = MockAPIService.getInstance();
+          const response = await mockAPI.makeRequest('auth/login', credentials);
+          
+          set({ loginStatus: 'success' });
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          
+          set({ 
+            user: response.user, 
+            isAuthenticated: true, 
+            isLoading: false,
+            loginStatus: 'idle'
+          });
+        } catch (error: any) {
+          set({ 
+            error: error.message, 
+            isLoading: false,
+            loginStatus: 'error'
+          });
+          
+          setTimeout(() => {
+            set({ loginStatus: 'idle' });
+          }, 2000);
+          
+          throw error;
+        }
+      },
 
-  resetLoginStatus: () => {
-    set({ loginStatus: 'idle' });
-  },
+      logout: () => {
+        set({
+          user: null, 
+          isAuthenticated: false, 
+          isLoading: false,
+          error: null,
+          loginStatus: 'idle'
+        });
+      },
 
-  forgotPassword: async (email: string) => {
-    set({ isLoading: true, error: null });
-    
-    try {
-      const mockAPI = MockAPIService.getInstance();
-      await mockAPI.makeRequest('auth/forgot-password', { email });
-      set({ isLoading: false });
-    } catch (error: any) {
-      set({ 
-        error: error.message, 
-        isLoading: false 
-      });
-      throw error;
+      clearError: () => {
+        set({ error: null });
+      },
+
+      resetLoginStatus: () => {
+        set({ loginStatus: 'idle' });
+      },
+
+      forgotPassword: async (email: string) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          const mockAPI = MockAPIService.getInstance();
+          await mockAPI.makeRequest('auth/forgot-password', { email });
+          set({ isLoading: false });
+        } catch (error: any) {
+          set({ 
+            error: error.message, 
+            isLoading: false 
+          });
+          throw error;
+        }
+      }
+    }),
+    {
+      name: 'boosttrade-auth',
+      partialize: (state) => ({ 
+        user: state.user, 
+        isAuthenticated: state.isAuthenticated 
+      }),
     }
-  }
-}));
+  )
+);

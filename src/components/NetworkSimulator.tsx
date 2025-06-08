@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wifi, WifiOff, Activity, Settings } from 'lucide-react';
-import { MockAPIService } from '@/services/mockApiService';
+import { MockAPIService } from '../services/mockApiService';
 
 type NetworkCondition = 'fast' | 'normal' | 'slow' | 'unstable';
 

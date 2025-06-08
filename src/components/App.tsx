@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { LoginForm } from '@/components/LoginForm';
-import { DashboardLayout } from '@/components/DashboardLayout';
-import { NetworkSimulator } from '@/components/NetworkSimulator';
-import { useAuthStore } from '@/stores/authStore';
+import { LoginForm } from './LoginForm';
+import { DashboardLayout } from './DashboardLayout';
+import { NetworkSimulator } from './NetworkSimulator';
+import { useAuthStore } from '../stores/authStore';
 
 // Main App Component
 const App: React.FC = () => {

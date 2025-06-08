@@ -1,14 +1,40 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Menu, Target, Store, User, BarChart3 } from 'lucide-react';
-import { useAuthStore } from '@/stores/authStore';
-import { useNavigationStore } from '@/stores/navigationStore';
+import { useAuthStore } from '../stores/authStore';
+import { useNavigationStore } from '../stores/navigationStore';
 import { Sidebar } from './Sidebar';
+
+// Helper function to get page title from route
+const getPageTitle = (route: string) => {
+  if (route === '/') return 'Dashboard';
+  
+  const routeMap: Record<string, string> = {
+    '/emailinvites': 'Email Invites',
+    '/rolestofeaturemapping': 'Roles to Feature Mapping',
+    '/addusers': 'Add Users',
+    '/addplacements': 'Add Placements',
+    '/campaignconditions': 'Campaign Conditions',
+    '/createcampaign': 'Create Campaign',
+    '/publishcampaign': 'Publish Campaign',
+    '/previewcampaign': 'Preview Campaign',
+    '/posstoresdevice': 'POS Stores/Device',
+    '/devicehealth': 'Device Health',
+    '/report1': 'Report 1',
+    '/report2': 'Report 2',
+    '/report3': 'Report 3'
+  };
+  
+  return routeMap[route] || 'Page';
+};
 
 // Mobile Header Component
 export const MobileHeader: React.FC = () => {
-  const { toggleMobileMenu, currentPage } = useNavigationStore();
+  const { toggleMobileMenu } = useNavigationStore();
   const { user } = useAuthStore();
+  const router = useRouter();
+  const currentPage = getPageTitle(router.pathname);
 
   return (
     <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between">
@@ -33,8 +59,9 @@ export const MobileHeader: React.FC = () => {
 
 // Main Content Component
 export const MainContent: React.FC = () => {
-  const { currentPage } = useNavigationStore();
   const { user } = useAuthStore();
+  const router = useRouter();
+  const currentPage = getPageTitle(router.pathname);
 
   return (
     <div className="flex-1 bg-gray-50 p-4 lg:p-8 overflow-auto">

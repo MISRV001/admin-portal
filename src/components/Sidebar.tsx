@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { ChevronDown, ChevronRight, Menu, X, User, LogOut } from 'lucide-react';
-import { useAuthStore } from '@/stores/authStore';
-import { useNavigationStore } from '@/stores/navigationStore';
-import { getNavigationItems } from '@/utils/roleBasedNavigation';
+import { useAuthStore } from '../stores/authStore';
+import { useNavigationStore } from '../stores/navigationStore';
+import { getNavigationItems } from '../utils/roleBasedNavigation';
 
 interface CollapsibleMenuItemProps {
   title: string;
@@ -20,7 +21,21 @@ const CollapsibleMenuItem: React.FC<CollapsibleMenuItemProps> = ({
   isMobile = false 
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { setCurrentPage } = useNavigationStore();
+  const router = useRouter();
+  const { closeMobileMenu } = useNavigationStore();
+
+  const getRoute = (pageName: string) => {
+    if (pageName === 'Dashboard') return '/';
+    return `/${pageName.toLowerCase().replace(/\s+/g, '')}`;
+  };
+
+  const handleNavigation = (pageName: string) => {
+    const route = getRoute(pageName);
+    router.push(route);
+    if (isMobile) {
+      closeMobileMenu();
+    }
+  };
 
   if (isCollapsed && !isMobile) {
     return (
@@ -52,7 +67,7 @@ const CollapsibleMenuItem: React.FC<CollapsibleMenuItemProps> = ({
           {children.map((child, index) => (
             <button
               key={index}
-              onClick={() => setCurrentPage(child.name)}
+              onClick={() => handleNavigation(child.name)}
               className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors text-left"
             >
               {child.icon}
