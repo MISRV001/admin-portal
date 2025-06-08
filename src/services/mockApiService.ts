@@ -23,6 +23,7 @@ class MockAPIService {
     failureRate: 0.01,
     slowResponseThreshold: 2000
   };
+  private mockDataCache: Record<string, any> = {};
 
   static getInstance(): MockAPIService {
     if (!MockAPIService.instance) {
@@ -32,94 +33,98 @@ class MockAPIService {
   }
 
   constructor() {
-    this.apiIdentifier = 'default';
+    this.apiIdentifier = this.getStoredApiIdentifier();
     this.initializeMockData();
   }
 
-  private initializeMockData() {
-    this.responses = {
-      'auth/login': {
-        success: { 
-          admin: {
-            token: 'admin-jwt-token-123', 
-            user: { 
-              id: 1, 
-              name: 'John Doe', 
-              email: 'admin@boosttrade.com', 
-              role: 'admin',
-              permissions: [
-                'admin.users.manage',
-                'admin.roles.manage', 
-                'admin.placements.manage',
-                'admin.conditions.manage',
-                'campaigns.create',
-                'campaigns.edit',
-                'campaigns.delete',
-                'campaigns.publish',
-                'campaigns.preview',
-                'stores.manage',
-                'stores.health',
-                'reports.view_all',
-                'reports.export'
-              ]
-            } 
-          },
-          campaign_manager: {
-            token: 'campaign-jwt-token-456',
-            user: {
-              id: 2,
-              name: 'Alice Johnson',
-              email: 'campaign@boosttrade.com',
-              role: 'campaign_manager',
-              permissions: [
-                'campaigns.create',
-                'campaigns.edit',
-                'campaigns.publish',
-                'campaigns.preview',
-                'stores.view',
-                'reports.view_campaigns'
-              ]
-            }
-          },
-          reports_only: {
-            token: 'reports-jwt-token-789',
-            user: {
-              id: 3,
-              name: 'Bob Smith',
-              email: 'analyst@boosttrade.com',
-              role: 'reports_only',
-              permissions: [
-                'reports.view_all',
-                'reports.export',
-                'dashboard.view'
-              ]
+  private getStoredApiIdentifier(): string {
+    try {
+      return localStorage.getItem('api-identifier') || 'default';
+    } catch (error) {
+      console.warn('localStorage not available, using default API identifier');
+      return 'default';
+    }
+  }
+
+  private setStoredApiIdentifier(identifier: string): void {
+    try {
+      localStorage.setItem('api-identifier', identifier);
+      this.apiIdentifier = identifier;
+      console.log(`API Identifier set to: ${identifier}`);
+    } catch (error) {
+      console.warn('localStorage not available, cannot persist API identifier');
+    }
+  }
+
+  private async loadMockFile(filename: string): Promise<any> {
+    if (this.mockDataCache[filename]) {
+      return this.mockDataCache[filename];
+    }
+
+    try {
+      // Import the JSON files as modules
+      let data;
+      switch (filename) {
+        case 'auth':
+          data = await import('../mocks/responses/auth.json');
+          break;
+        case 'dashboard':
+          data = await import('../mocks/responses/dashboard.json');
+          break;
+        case 'campaigns':
+          data = await import('../mocks/responses/campaigns.json');
+          break;
+        default:
+          return {};
+      }
+      
+      this.mockDataCache[filename] = data.default || data;
+      return this.mockDataCache[filename];
+    } catch (error) {
+      console.error(`Failed to load mock file: ${filename}`, error);
+      return {};
+    }
+  }
+
+  private async initializeMockData() {
+    try {
+      const [authData, dashboardData, campaignData] = await Promise.all([
+        this.loadMockFile('auth'),
+        this.loadMockFile('dashboard'),
+        this.loadMockFile('campaigns')
+      ]);
+
+      this.responses = {
+        ...authData,
+        ...dashboardData,
+        ...campaignData
+      };
+    } catch (error) {
+      console.error('Failed to initialize mock data:', error);
+      // Fallback to minimal data
+      this.responses = {
+        'auth/login': {
+          default: {
+            admin: {
+              token: 'fallback-token',
+              user: { id: 1, name: 'Fallback User', email: 'user@example.com', role: 'admin', permissions: [] }
             }
           }
-        },
-        error: { message: 'Invalid credentials' }
-      },
-      'auth/forgot-password': {
-        success: { message: 'Password reset email sent successfully' },
-        error: { message: 'Email not found' }
-      },
-      'dashboard/stats': {
-        campaigns: 24,
-        stores: 156,
-        activeUsers: 1250,
-        revenue: '$2.4M'
-      }
-    };
+        }
+      };
+    }
   }
 
   public setNetworkConfig(config: Partial<NetworkConfig>): void {
     this.networkConfig = { ...this.networkConfig, ...config };
+    console.log('Network config updated:', this.networkConfig);
   }
 
   public getNetworkConfig(): NetworkConfig {
     return { ...this.networkConfig };
   }
 
-  public simulateNetworkConditions(condition: 'fast' | 'normal' | 'slow' | 'unstable'): void {
+  public simulateNetworkConditions(condition: 'fast' | 'normal' | 'slow' | 'unstable' | 'offline'): void {
     switch (condition) {
       case 'fast':
         this.setNetworkConfig({
@@ -149,6 +154,13 @@ class MockAPIService {
           failureRate: 0.15
         });
         break;
+      case 'offline':
+        this.setNetworkConfig({
+          latency: { min: 0, max: 0 },
+          timeout: 1000,
+          failureRate: 1.0
+        });
+        break;
     }
   }
 
@@ -161,7 +173,13 @@ class MockAPIService {
     return Math.random() < this.networkConfig.failureRate;
   }
 
-  private getRoleBasedResponse(endpoint: string, credentials?: any): any {
+  private getResponseForIdentifier(endpoint: string, credentials?: any): any {
+    const mockResponse = this.responses[endpoint];
+    if (!mockResponse) return null;
+
+    // Get response for current identifier, fallback to default
+    const identifierResponse = mockResponse[this.apiIdentifier] || mockResponse['default'];
+    
     if (endpoint === 'auth/login' && credentials) {
       let role: string = credentials.role || 'admin';
       
@@ -171,11 +189,10 @@ class MockAPIService {
         role = 'reports_only';
       }
 
-      const response = this.responses[endpoint];
-      return response.success[role] || response.success.admin;
+      return identifierResponse[role] || identifierResponse.admin;
     }
     
-    return this.responses[endpoint];
+    return identifierResponse;
   }
 
   async makeRequest(endpoint: string, data?: any, config: MockConfig = {}): Promise<any> {
@@ -187,40 +204,61 @@ class MockAPIService {
       simulateSlowResponse = false
     } = config;
 
+    // Ensure mock data is loaded
+    if (Object.keys(this.responses).length === 0) {
+      await this.initializeMockData();
+    }
+
+    // Simulate offline condition
+    if (this.networkConfig.failureRate >= 1.0) {
+      throw new Error('Network error: No internet connection');
+    }
+
+    // Simulate timeout
     if (simulateTimeout) {
       throw new Error('Request timeout');
     }
 
+    // Calculate delay
     const requestDelay = delay || this.getRandomLatency();
     const finalDelay = simulateSlowResponse ? 
       Math.max(requestDelay, this.networkConfig.slowResponseThreshold) : 
       requestDelay;
 
+    // Log network simulation for debugging
+    console.log(`API Request: ${endpoint} | Identifier: ${this.apiIdentifier} | Delay: ${finalDelay.toFixed(0)}ms`);
+
+    // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, finalDelay));
 
+    // Simulate random network failures
     if (!shouldFail && this.shouldSimulateFailure()) {
       throw new Error('Network error: Connection lost');
     }
 
+    // Use custom response if provided
     if (customResponse) {
       return customResponse;
     }
 
-    const mockResponse = this.getRoleBasedResponse(endpoint, data);
+    const mockResponse = this.getResponseForIdentifier(endpoint, data);
     
     if (!mockResponse) {
-      throw new Error(`Mock endpoint ${endpoint} not found`);
+      throw new Error(`Mock endpoint ${endpoint} not found for identifier ${this.apiIdentifier}`);
     }
 
+    // Handle error scenarios
     if (shouldFail && mockResponse.error) {
       throw new Error(mockResponse.error.message);
     }
 
-    return mockResponse.success || mockResponse;
+    // Return success response
+    return mockResponse;
   }
 
   public setApiIdentifier(identifier: string): void {
-    this.apiIdentifier = identifier;
+    this.setStoredApiIdentifier(identifier);
+    console.log(`Switched to API identifier: ${identifier}`);
   }
 
   public getApiIdentifier(): string {
@@ -229,6 +267,19 @@ class MockAPIService {
 
   public getAvailableIdentifiers(): string[] {
     return ['default', 'staging', 'development', 'testing'];
+  }
+
+  // New method to get available identifiers for a specific endpoint
+  public getEndpointIdentifiers(endpoint: string): string[] {
+    const mockResponse = this.responses[endpoint];
+    if (!mockResponse) return [];
+    return Object.keys(mockResponse);
+  }
+
+  // Method to preview response for different identifiers
+  public previewResponse(endpoint: string, identifier: string): any {
+    const mockResponse = this.responses[endpoint];
+    return mockResponse ? mockResponse[identifier] : null;
   }
 }
 

@@ -1,0 +1,33 @@
+{
+  "campaigns/list": {
+    "default": {
+      "campaigns": [
+        {
+          "id": 1,
+          "name": "Summer Sale 2024",
+          "status": "active",
+          "impressions": 125000,
+          "conversions": 3400
+        },
+        {
+          "id": 2,
+          "name": "Holiday Promo",
+          "status": "draft",
+          "impressions": 0,
+          "conversions": 0
+        }
+      ]
+    },
+    "staging": {
+      "campaigns": [
+        {
+          "id": 1,
+          "name": "Staging Campaign",
+          "status": "active",
+          "impressions": 50000,
+          "conversions": 1200
+        }
+      ]
+    }
+  }
+}

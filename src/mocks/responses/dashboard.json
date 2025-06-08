@@ -1,0 +1,25 @@
+{
+  "dashboard/stats": {
+    "default": {
+      "campaigns": 24,
+      "stores": 156,
+      "activeUsers": 1250,
+      "revenue": "$2.4M",
+      "lastUpdated": "2024-12-31T10:00:00Z"
+    },
+    "staging": {
+      "campaigns": 12,
+      "stores": 78,
+      "activeUsers": 625,
+      "revenue": "$1.2M",
+      "environment": "staging"
+    },
+    "development": {
+      "campaigns": 5,
+      "stores": 25,
+      "activeUsers": 150,
+      "revenue": "$350K",
+      "environment": "development"
+    }
+  }
+}

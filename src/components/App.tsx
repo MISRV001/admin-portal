@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { NetworkSimulator } from './NetworkSimulator';
 import { 
   ChevronDown, 
   ChevronRight, 
@@ -614,6 +615,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50" style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}>
       {isAuthenticated ? <DashboardLayout /> : <LoginForm />}
+      <NetworkSimulator />
     </div>
   );
 };
