@@ -1,0 +1,22 @@
+{
+  "devices": [
+    {
+      "id": "device1",
+      "name": "Device One",
+      "status": "active",
+      "storeId": "store1"
+    },
+    {
+      "id": "device2",
+      "name": "Device Two",
+      "status": "inactive",
+      "storeId": "store1"
+    },
+    {
+      "id": "device3",
+      "name": "Device Three",
+      "status": "active",
+      "storeId": "store2"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "success": true,
+  "message": "User updated successfully.",
+  "data": {
+    "id": 1,
+    "username": "updatedUser",
+    "email": "updatedUser@example.com",
+    "firstName": "Updated",
+    "lastName": "User",
+    "status": "active",
+    "roles": ["user", "admin"],
+    "updatedAt": "2023-10-01T12:00:00Z"
+  }
+}

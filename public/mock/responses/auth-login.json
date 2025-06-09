@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "message": "Login successful",
+  "data": {
+    "user": {
+      "id": "12345",
+      "username": "johndoe",
+      "email": "johndoe@example.com",
+      "token": "abcdef123456",
+      "expires_in": 3600
+    }
+  }
+}

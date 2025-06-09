@@ -1,0 +1,121 @@
+{
+  "success": {
+    "placements": [
+      {
+        "id": "pl_001",
+        "name": "POS_Small_Screen",
+        "displayType": "image_video",
+        "orientation": "landscape",
+        "resolution": "1280x720",
+        "dimensions": {
+          "width": 1280,
+          "height": 720
+        },
+        "supportedFormats": [
+          "MP4",
+          "JPG",
+          "PNG"
+        ],
+        "maxFileSize": "50MB",
+        "refreshRate": "30fps",
+        "location": "Point of Sale",
+        "isActive": true,
+        "createdAt": "2024-01-15T10:00:00Z",
+        "updatedAt": "2024-01-15T10:00:00Z"
+      },
+      {
+        "id": "pl_002",
+        "name": "Store_TV_55",
+        "displayType": "digital_signage",
+        "orientation": "landscape",
+        "resolution": "1920x1080",
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        },
+        "supportedFormats": [
+          "MP4",
+          "JPG",
+          "PNG",
+          "GIF"
+        ],
+        "maxFileSize": "100MB",
+        "refreshRate": "60fps",
+        "location": "Store Display",
+        "isActive": true,
+        "createdAt": "2024-01-15T11:00:00Z",
+        "updatedAt": "2024-01-15T11:00:00Z"
+      },
+      {
+        "id": "pl_003",
+        "name": "Mall_Display_Screen",
+        "displayType": "led_screen",
+        "orientation": "portrait",
+        "resolution": "1080x1920",
+        "dimensions": {
+          "width": 1080,
+          "height": 1920
+        },
+        "supportedFormats": [
+          "MP4",
+          "JPG"
+        ],
+        "maxFileSize": "75MB",
+        "refreshRate": "60fps",
+        "location": "Mall Entrance",
+        "isActive": true,
+        "createdAt": "2024-01-15T12:00:00Z",
+        "updatedAt": "2024-01-15T12:00:00Z"
+      },
+      {
+        "id": "pl_004",
+        "name": "Kiosk_Medium_Screen",
+        "displayType": "interactive_display",
+        "orientation": "portrait",
+        "resolution": "720x1280",
+        "dimensions": {
+          "width": 720,
+          "height": 1280
+        },
+        "supportedFormats": [
+          "MP4",
+          "JPG",
+          "PNG"
+        ],
+        "maxFileSize": "40MB",
+        "refreshRate": "30fps",
+        "location": "Information Kiosk",
+        "isActive": true,
+        "createdAt": "2024-01-15T13:00:00Z",
+        "updatedAt": "2024-01-15T13:00:00Z"
+      },
+      {
+        "id": "pl_005",
+        "name": "Window_Large_Display",
+        "displayType": "digital_signage",
+        "orientation": "landscape",
+        "resolution": "3840x2160",
+        "dimensions": {
+          "width": 3840,
+          "height": 2160
+        },
+        "supportedFormats": [
+          "MP4",
+          "JPG",
+          "PNG",
+          "WEBM"
+        ],
+        "maxFileSize": "200MB",
+        "refreshRate": "60fps",
+        "location": "Store Window",
+        "isActive": true,
+        "createdAt": "2024-01-15T14:00:00Z",
+        "updatedAt": "2024-01-15T14:00:00Z"
+      }
+    ]
+  },
+  "error": {
+    "message": "Failed to load placements",
+    "code": "PLACEMENTS_LOAD_FAILED"
+  }
+}

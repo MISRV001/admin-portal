@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "message": "Campaign updated successfully.",
+  "data": {
+    "id": "campaign123",
+    "name": "Updated Campaign Name",
+    "description": "This is an updated description for the campaign.",
+    "status": "active",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  }
+}

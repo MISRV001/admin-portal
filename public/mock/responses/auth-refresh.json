@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "message": "Token refreshed successfully.",
+  "data": {
+    "accessToken": "newAccessToken123",
+    "refreshToken": "newRefreshToken123",
+    "expiresIn": 3600
+  }
+}

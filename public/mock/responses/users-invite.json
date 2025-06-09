@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "message": "User invited successfully.",
+  "data": {
+    "userId": "12345",
+    "email": "newuser@example.com",
+    "invitationSentAt": "2023-10-01T12:00:00Z"
+  }
+}

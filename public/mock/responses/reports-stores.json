@@ -1,0 +1,26 @@
+{
+  "report": {
+    "storeId": "12345",
+    "storeName": "Sample Store",
+    "totalSales": 15000,
+    "totalCustomers": 200,
+    "salesByCategory": {
+      "electronics": 5000,
+      "clothing": 3000,
+      "groceries": 7000
+    },
+    "customerFeedback": [
+      {
+        "customerId": "1",
+        "feedback": "Great service!",
+        "rating": 5
+      },
+      {
+        "customerId": "2",
+        "feedback": "Good selection of products.",
+        "rating": 4
+      }
+    ],
+    "reportDate": "2023-10-01"
+  }
+}

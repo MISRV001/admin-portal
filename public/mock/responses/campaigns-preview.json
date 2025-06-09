@@ -1,0 +1,18 @@
+{
+  "campaignId": "12345",
+  "title": "Spring Sale",
+  "description": "A campaign to promote the Spring Sale with discounts on various products.",
+  "startDate": "2023-03-01T00:00:00Z",
+  "endDate": "2023-03-31T23:59:59Z",
+  "status": "active",
+  "previewImage": "https://example.com/images/spring-sale-preview.jpg",
+  "targetAudience": {
+    "ageRange": "18-35",
+    "interests": ["fashion", "home decor", "electronics"]
+  },
+  "metrics": {
+    "impressions": 10000,
+    "clicks": 500,
+    "conversions": 50
+  }
+}

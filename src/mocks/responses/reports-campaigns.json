@@ -1,0 +1,31 @@
+{
+  "success": {
+    "overview": {
+      "totalRevenue": "$2,847,392",
+      "totalCampaigns": 24,
+      "activeUsers": 1247,
+      "conversionRate": 3.2
+    },
+    "chartData": {
+      "performance": [
+        { "month": "Jan", "impressions": 120000, "conversions": 1250, "revenue": 145000 },
+        { "month": "Feb", "impressions": 145000, "conversions": 1680, "revenue": 189000 },
+        { "month": "Mar", "impressions": 189000, "conversions": 2150, "revenue": 234000 },
+        { "month": "Apr", "impressions": 203000, "conversions": 2890, "revenue": 287000 },
+        { "month": "May", "impressions": 245000, "conversions": 3250, "revenue": 312000 },
+        { "month": "Jun", "impressions": 287000, "conversions": 3780, "revenue": 356000 }
+      ],
+      "categories": [
+        { "name": "Beauty", "value": 35, "color": "#3b82f6" },
+        { "name": "Personnel Care", "value": 28, "color": "#10b981" },
+        { "name": "Grocery", "value": 18, "color": "#f59e0b" },
+        { "name": "Baby&Kids", "value": 12, "color": "#ef4444" },
+        { "name": "Photo", "value": 7, "color": "#8b5cf6" }
+      ]
+    }
+  },
+  "error": {
+    "message": "Failed to load campaign reports",
+    "code": "REPORTS_LOAD_FAILED"
+  }
+}
