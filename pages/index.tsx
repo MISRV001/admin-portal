@@ -5,6 +5,7 @@ import { useAuthStore } from '../src/stores/authStore';
 import { DashboardLayout } from '../src/components/DashboardLayout';
 import { LoginForm } from '../src/components/LoginForm';
 import { NetworkSimulator } from '../src/components/NetworkSimulator';
+import { EnhancedApiModeSelector } from '../src/components//ApiModeSelector';
 
 export default function HomePage() {
   const { isAuthenticated } = useAuthStore();
@@ -46,6 +47,7 @@ export default function HomePage() {
       <div className="min-h-screen bg-gray-50" style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}>
         {isAuthenticated ? <DashboardLayout /> : <LoginForm />}
         <NetworkSimulator />
+        <EnhancedApiModeSelector />
       </div>
     </>
   );

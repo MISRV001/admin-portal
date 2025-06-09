@@ -1,0 +1,22 @@
+{
+  "stores": [
+    {
+      "id": 1,
+      "name": "Store A",
+      "location": "Location A",
+      "status": "open"
+    },
+    {
+      "id": 2,
+      "name": "Store B",
+      "location": "Location B",
+      "status": "closed"
+    },
+    {
+      "id": 3,
+      "name": "Store C",
+      "location": "Location C",
+      "status": "open"
+    }
+  ]
+}

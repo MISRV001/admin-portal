@@ -1,0 +1,21 @@
+{
+  "status": "healthy",
+  "stores": [
+    {
+      "id": "store_1",
+      "name": "Store One",
+      "status": "operational"
+    },
+    {
+      "id": "store_2",
+      "name": "Store Two",
+      "status": "operational"
+    },
+    {
+      "id": "store_3",
+      "name": "Store Three",
+      "status": "under_maintenance"
+    }
+  ],
+  "timestamp": "2023-10-01T12:00:00Z"
+}

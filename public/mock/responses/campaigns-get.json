@@ -1,0 +1,23 @@
+{
+  "id": "campaign-123",
+  "name": "Spring Sale Campaign",
+  "description": "A campaign to promote the spring sale with discounts on various products.",
+  "startDate": "2023-03-01",
+  "endDate": "2023-03-31",
+  "status": "active",
+  "targetAudience": {
+    "ageRange": "18-35",
+    "interests": ["fashion", "electronics", "home decor"]
+  },
+  "budget": {
+    "total": 5000,
+    "spent": 2000
+  },
+  "performanceMetrics": {
+    "impressions": 10000,
+    "clicks": 500,
+    "conversions": 50
+  },
+  "createdAt": "2023-02-15T10:00:00Z",
+  "updatedAt": "2023-02-20T12:00:00Z"
+}

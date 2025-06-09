@@ -1,0 +1,38 @@
+{
+  "dashboard": {
+    "totalUsers": 1500,
+    "activeUsers": 1200,
+    "totalCampaigns": 75,
+    "activeCampaigns": 50,
+    "totalStores": 30,
+    "activeStores": 28,
+    "reports": [
+      {
+        "campaignId": "campaign_1",
+        "performance": {
+          "impressions": 10000,
+          "clicks": 500,
+          "conversions": 50
+        }
+      },
+      {
+        "campaignId": "campaign_2",
+        "performance": {
+          "impressions": 15000,
+          "clicks": 800,
+          "conversions": 100
+        }
+      }
+    ],
+    "recentActivities": [
+      {
+        "activity": "User John Doe logged in",
+        "timestamp": "2023-10-01T12:00:00Z"
+      },
+      {
+        "activity": "Campaign 'Fall Sale' published",
+        "timestamp": "2023-10-01T12:05:00Z"
+      }
+    ]
+  }
+}

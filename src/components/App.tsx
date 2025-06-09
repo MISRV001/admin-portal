@@ -3,6 +3,7 @@ import { LoginForm } from './LoginForm';
 import { DashboardLayout } from './DashboardLayout';
 import { NetworkSimulator } from './NetworkSimulator';
 import { useAuthStore } from '../stores/authStore';
+import { EnhancedApiModeSelector } from './ApiModeSelector';
 
 // Main App Component
 const App: React.FC = () => {
@@ -23,6 +24,7 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-gray-50" style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}>
       {isAuthenticated ? <DashboardLayout /> : <LoginForm />}
       <NetworkSimulator />
+      <EnhancedApiModeSelector />
     </div>
   );
 };

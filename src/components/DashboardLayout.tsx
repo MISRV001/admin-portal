@@ -5,6 +5,9 @@ import { Menu, Target, Store, User, BarChart3 } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 import { useNavigationStore } from '../stores/navigationStore';
 import { Sidebar } from './Sidebar';
+import { CreateCampaign } from './CreateCampaign';
+import { Report1 } from './Report1';
+import { AddUsers } from './AddUsers';
 
 // Helper function to get page title from route
 const getPageTitle = (route: string) => {
@@ -29,12 +32,124 @@ const getPageTitle = (route: string) => {
   return routeMap[route] || 'Page';
 };
 
+// Dashboard content component
+const DashboardContent: React.FC = () => (
+  <div className="space-y-6">
+    <div className="text-center py-8">
+      <div className="text-6xl mb-4">📊</div>
+      <h2 className="text-2xl font-bold text-gray-700 mb-2">Dashboard Overview</h2>
+      <p className="text-gray-500">Monitor your campaigns, stores, and performance metrics</p>
+    </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <Card className="border-0 shadow-lg">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-500">Active Campaigns</p>
+              <p className="text-3xl font-bold text-blue-600">24</p>
+            </div>
+            <Target className="w-12 h-12 text-blue-500 opacity-20" />
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="border-0 shadow-lg">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-500">Total Stores</p>
+              <p className="text-3xl font-bold text-green-600">156</p>
+            </div>
+            <Store className="w-12 h-12 text-green-500 opacity-20" />
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="border-0 shadow-lg">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-500">Active Users</p>
+              <p className="text-3xl font-bold text-purple-600">1.2K</p>
+            </div>
+            <User className="w-12 h-12 text-purple-500 opacity-20" />
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="border-0 shadow-lg">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-500">Revenue</p>
+              <p className="text-3xl font-bold text-orange-600">$2.4M</p>
+            </div>
+            <BarChart3 className="w-12 h-12 text-orange-500 opacity-20" />
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  </div>
+);
+
+// Default fallback component
+const DefaultContent: React.FC<{ pageName: string; userRole?: string }> = ({ pageName, userRole }) => (
+  <div className="text-center py-12">
+    <div className="text-4xl mb-4">🚀</div>
+    <h2 className="text-xl font-bold text-gray-700 mb-2">Welcome to {pageName}</h2>
+    <p className="text-gray-500">This is the {pageName} section of BoostTrade.</p>
+    <p className="text-sm text-gray-400 mt-4">
+      Navigate using the sidebar menu. Available options are based on your role: 
+      <span className="font-semibold capitalize"> {userRole?.replace('_', ' ')}</span>
+    </p>
+    <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200 max-w-md mx-auto">
+      <h3 className="text-sm font-semibold text-blue-700 mb-2">Page Status</h3>
+      <p className="text-xs text-blue-600">
+        This page is using the default template. A custom component for "{pageName}" can be created.
+      </p>
+    </div>
+  </div>
+);
+
+// Route content renderer with detailed debugging
+const getRouteContent = (routePath: string, pageName: string, userRole?: string) => {
+  console.log('=== ROUTE MATCHING DEBUG ===');
+  console.log('routePath (asPath):', routePath);
+  console.log('pageName:', pageName);
+  console.log('userRole:', userRole);
+  
+  // Clean the pathname
+  const cleanPath = routePath.toLowerCase().trim();
+  console.log('cleanPath:', cleanPath);
+  
+  // Route matching
+  if (cleanPath === '/') {
+    console.log('✅ Matched: Dashboard');
+    return <DashboardContent />;
+  }
+  
+  if (cleanPath === '/createcampaign') {
+    console.log('✅ Matched: CreateCampaign');
+    return <CreateCampaign />;
+  }
+  
+  if (cleanPath === '/report1') {
+    console.log('✅ Matched: Report1');
+    return <Report1 />;
+  }
+  
+  if (cleanPath === '/addusers') {
+    console.log('✅ Matched: AddUsers');
+    return <AddUsers />;
+  }
+  
+  console.log('⚠️ No match found, using DefaultContent');
+  return <DefaultContent pageName={pageName} userRole={userRole} />;
+};
+
 // Mobile Header Component
 export const MobileHeader: React.FC = () => {
   const { toggleMobileMenu } = useNavigationStore();
   const { user } = useAuthStore();
   const router = useRouter();
-  const currentPage = getPageTitle(router.pathname);
+  const currentPage = getPageTitle(router.asPath); // Use asPath instead of pathname
 
   return (
     <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between">
@@ -61,7 +176,13 @@ export const MobileHeader: React.FC = () => {
 export const MainContent: React.FC = () => {
   const { user } = useAuthStore();
   const router = useRouter();
-  const currentPage = getPageTitle(router.pathname);
+  const currentPage = getPageTitle(router.asPath); // Use asPath instead of pathname
+
+  console.log('=== MAIN CONTENT RENDER ===');
+  console.log('router.pathname:', router.pathname);
+  console.log('router.asPath:', router.asPath); // This shows the actual URL
+  console.log('currentPage:', currentPage);
+  console.log('user:', user);
 
   return (
     <div className="flex-1 bg-gray-50 p-4 lg:p-8 overflow-auto">
@@ -70,84 +191,13 @@ export const MainContent: React.FC = () => {
           <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
             <CardTitle className="text-xl lg:text-2xl">{currentPage}</CardTitle>
             <CardDescription className="text-blue-100">
-              Currently viewing: {currentPage} {user && `(${user.role.replace('_', ' ')} access)`}
+              {user && `${user.role.replace('_', ' ')} access`} • BoostTrade Platform
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6 lg:p-8">
-            <div className="text-center py-8 lg:py-12">
-              <div className="text-4xl lg:text-6xl mb-4">🚀</div>
-              <h2 className="text-xl lg:text-2xl font-bold text-gray-700 mb-2">Welcome to {currentPage}</h2>
-              <p className="text-gray-500">This is the {currentPage} section of BoostTrade.</p>
-              <p className="text-sm text-gray-400 mt-4">
-                Navigate using the sidebar menu. Available options are based on your role: <span className="font-semibold capitalize">{user?.role.replace('_', ' ')}</span>
-              </p>
-              
-              <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <h3 className="text-sm font-semibold text-blue-700 mb-2">Your Access Level</h3>
-                <div className="text-xs text-blue-600 space-y-1">
-                  {user?.role === 'admin' && (
-                    <p>✅ Full system access including user management, campaigns, stores, and reports</p>
-                  )}
-                  {user?.role === 'campaign_manager' && (
-                    <p>✅ Campaign creation, editing, publishing, and campaign-related reports</p>
-                  )}
-                  {user?.role === 'reports_only' && (
-                    <p>✅ Read-only access to all reports and analytics</p>
-                  )}
-                </div>
-              </div>
-            </div>
+            {getRouteContent(router.asPath, currentPage, user?.role)}
           </CardContent>
         </Card>
-
-        {currentPage === 'Dashboard' && (
-          <div className="mt-6 lg:mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-4 lg:p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Active Campaigns</p>
-                    <p className="text-2xl lg:text-3xl font-bold text-blue-600">24</p>
-                  </div>
-                  <Target className="w-8 h-8 lg:w-12 lg:h-12 text-blue-500 opacity-20" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-4 lg:p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Total Stores</p>
-                    <p className="text-2xl lg:text-3xl font-bold text-green-600">156</p>
-                  </div>
-                  <Store className="w-8 h-8 lg:w-12 lg:h-12 text-green-500 opacity-20" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-4 lg:p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Active Users</p>
-                    <p className="text-2xl lg:text-3xl font-bold text-purple-600">1.2K</p>
-                  </div>
-                  <User className="w-8 h-8 lg:w-12 lg:h-12 text-purple-500 opacity-20" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-4 lg:p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Revenue</p>
-                    <p className="text-2xl lg:text-3xl font-bold text-orange-600">$2.4M</p>
-                  </div>
-                  <BarChart3 className="w-8 h-8 lg:w-12 lg:h-12 text-orange-500 opacity-20" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -155,6 +205,8 @@ export const MainContent: React.FC = () => {
 
 // Dashboard Layout Component
 export const DashboardLayout: React.FC = () => {
+  console.log('=== DASHBOARD LAYOUT RENDER ===');
+  
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
       <Sidebar />

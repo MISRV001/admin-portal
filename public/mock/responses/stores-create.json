@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "message": "Store created successfully.",
+  "data": {
+    "storeId": "12345",
+    "storeName": "New Store",
+    "location": {
+      "address": "123 Main St",
+      "city": "Anytown",
+      "state": "CA",
+      "zip": "12345"
+    },
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  }
+}

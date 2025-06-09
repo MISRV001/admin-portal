@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "message": "Campaign published successfully.",
+  "data": {
+    "campaignId": "12345",
+    "title": "Spring Sale",
+    "status": "published",
+    "publishedAt": "2023-10-01T12:00:00Z",
+    "details": {
+      "description": "A campaign to promote the spring sale.",
+      "startDate": "2023-10-01",
+      "endDate": "2023-10-31",
+      "targetAudience": "All customers"
+    }
+  }
+}
