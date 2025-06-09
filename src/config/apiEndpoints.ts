@@ -291,8 +291,8 @@ export const apiEndpointsConfig: ApiEndpointsConfiguration = {
     },
     {
       endpoint: 'reports/campaigns',
-      name: 'Campaign Reports',
-      description: 'Get campaign performance analytics',
+      name: 'Campaign Performance Reports',
+      description: 'Get detailed campaign analytics and performance metrics',
       defaultMode: 'mock',
       mockFile: 'reports-campaigns.json',
       category: 'reports',

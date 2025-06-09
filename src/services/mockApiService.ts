@@ -132,6 +132,34 @@ class MockAPIService {
       'auth/forgot-password': {
         success: { message: 'Password reset email sent successfully' },
         error: { message: 'Email not found' }
+      },
+      'reports/campaigns': {
+        success: {
+          overview: {
+            totalRevenue: "$2,847,392",
+            totalCampaigns: 24,
+            activeUsers: 1247,
+            conversionRate: 3.2
+          },
+          chartData: {
+            performance: [
+              { month: "Jan", impressions: 120000, conversions: 1250, revenue: 145000 },
+              { month: "Feb", impressions: 145000, conversions: 1680, revenue: 189000 },
+              { month: "Mar", impressions: 189000, conversions: 2150, revenue: 234000 },
+              { month: "Apr", impressions: 203000, conversions: 2890, revenue: 287000 },
+              { month: "May", impressions: 245000, conversions: 3250, revenue: 312000 },
+              { month: "Jun", impressions: 287000, conversions: 3780, revenue: 356000 }
+            ],
+            categories: [
+              { "name": "Beauty", "value": 35, "color": "#3b82f6" },
+              { "name": "Personnel Care", "value": 28, "color": "#10b981" },
+              { "name": "Grocery", "value": 18, "color": "#f59e0b" },
+              { "name": "Baby&Kids", "value": 12, "color": "#ef4444" },
+              { "name": "Photo", "value": 7, "color": "#8b5cf6" }
+            ]
+          }
+        },
+        error: { message: 'Failed to load campaign reports' }
       }
     };
   }
@@ -222,6 +250,7 @@ class MockAPIService {
       // For now, we'll simulate loading from files
       const mockData = await this.simulateFileLoad(fileName);
       this.mockFileCache.set(fileName, mockData);
+      console.log(`Loadedmock data for ${fileName} - : ${mockData}`);
       return mockData;
     } catch (error) {
       console.error(`Failed to load mock file: ${fileName}`, error);
@@ -230,7 +259,17 @@ class MockAPIService {
   }
 
   private async simulateFileLoad(fileName: string): Promise<any> {
-    // Simulate loading mock files - in real implementation, use fetch or import
+    // Try to load from public/mock/responses/ first
+    try {
+      const response = await fetch(`/mock/responses/${fileName}`);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.log(`File ${fileName} not found in public folder, using fallback`);
+    }
+
+    // Fallback to simulated files
     const mockFiles: Record<string, any> = {
       'auth-login.json': {
         success: {
@@ -268,6 +307,33 @@ class MockAPIService {
             stores: 198,
             users: 1847,
             revenue: '$3.2M'
+          }
+        }
+      },
+      'reports-campaigns.json': {
+        success: {
+          overview: {
+            totalRevenue: "$2,847,392",
+            totalCampaigns: 24,
+            activeUsers: 1247,
+            conversionRate: 3.2
+          },
+          chartData: {
+            performance: [
+              { month: "Jan", impressions: 120000, conversions: 1250, revenue: 145000 },
+              { month: "Feb", impressions: 145000, conversions: 1680, revenue: 189000 },
+              { month: "Mar", impressions: 189000, conversions: 2150, revenue: 234000 },
+              { month: "Apr", impressions: 203000, conversions: 2890, revenue: 287000 },
+              { month: "May", impressions: 245000, conversions: 3250, revenue: 312000 },
+              { month: "Jun", impressions: 287000, conversions: 3780, revenue: 356000 }
+            ],
+            categories: [
+              { "name": "Beauty", "value": 35, "color": "#3b82f6" },
+              { "name": "Personnel Care", "value": 28, "color": "#10b981" },
+              { "name": "Grocery", "value": 18, "color": "#f59e0b" },
+              { "name": "Baby&Kids", "value": 12, "color": "#ef4444" },
+              { "name": "Photo", "value": 7, "color": "#8b5cf6" }
+            ]
           }
         }
       }

@@ -24,9 +24,9 @@ const getPageTitle = (route: string) => {
     '/previewcampaign': 'Preview Campaign',
     '/posstoresdevice': 'POS Stores/Device',
     '/devicehealth': 'Device Health',
-    '/report1': 'Report 1',
-    '/report2': 'Report 2',
-    '/report3': 'Report 3'
+    '/report1': 'Campaign Performance Report',
+    '/report2': 'Store Performance Report',
+    '/report3': 'Inventory Report',
   };
   
   return routeMap[route] || 'Page';

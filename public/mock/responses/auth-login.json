@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "message": "aLogin successful",
+  "message": "Login successful",
   "data": {
     "user": {
       "id": "12345",
