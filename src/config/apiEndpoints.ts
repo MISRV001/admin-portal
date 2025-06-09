@@ -371,17 +371,6 @@ export const apiEndpointsConfig: ApiEndpointsConfiguration = {
       permissions: ['admin.settings.manage']
     },
     {
-      endpoint: 'admin/placements',
-      name: 'List Placements',
-      description: 'Get all placement configurations',
-      defaultMode: 'mock',
-      mockFile: 'admin-placements.json',
-      category: 'admin',
-      methods: ['GET'],
-      requiresAuth: true,
-      permissions: ['admin.placements.manage']
-    },
-    {
       endpoint: 'admin/placements/create',
       name: 'Create Placement',
       description: 'Add new placement configuration',

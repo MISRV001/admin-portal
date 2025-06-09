@@ -160,58 +160,6 @@ class MockAPIService {
           }
         },
         error: { message: 'Failed to load campaign reports' }
-      },
-      'admin/placements': {
-        success: {
-          placements: [
-            {
-              id: 'pl_001',
-              name: 'POS_Small_Screen',
-              displayType: 'image_video',
-              orientation: 'landscape',
-              resolution: '1280x720',
-              dimensions: { width: 1280, height: 720 },
-              supportedFormats: ['MP4', 'JPG', 'PNG'],
-              maxFileSize: '50MB',
-              refreshRate: '30fps',
-              location: 'Point of Sale',
-              isActive: true,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString()
-            },
-            {
-              id: 'pl_002', 
-              name: 'Store_TV_55',
-              displayType: 'digital_signage',
-              orientation: 'landscape',
-              resolution: '1920x1080',
-              dimensions: { width: 1920, height: 1080 },
-              supportedFormats: ['MP4', 'JPG', 'PNG', 'GIF'],
-              maxFileSize: '100MB',
-              refreshRate: '60fps',
-              location: 'Store Display',
-              isActive: true,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString()
-            }
-          ]
-        },
-        error: { message: 'Failed to load placements' }
-      },
-      'admin/placements/create': {
-        success: {
-          id: 'pl_' + Date.now(),
-          message: 'Placement created successfully'
-        },
-        error: { message: 'Failed to create placement' }
-      },
-      'admin/placements/update': {
-        success: { message: 'Placement updated successfully' },
-        error: { message: 'Failed to update placement' }
-      },
-      'admin/placements/delete': {
-        success: { message: 'Placement deleted successfully' },
-        error: { message: 'Failed to delete placement' }
       }
     };
   }
@@ -302,7 +250,6 @@ class MockAPIService {
       // For now, we'll simulate loading from files
       const mockData = await this.simulateFileLoad(fileName);
       this.mockFileCache.set(fileName, mockData);
-      console.log(`Loadedmock data for ${fileName} - : ${mockData}`);
       return mockData;
     } catch (error) {
       console.error(`Failed to load mock file: ${fileName}`, error);
@@ -380,11 +327,11 @@ class MockAPIService {
               { month: "Jun", impressions: 287000, conversions: 3780, revenue: 356000 }
             ],
             categories: [
-              { "name": "Beauty", "value": 35, "color": "#3b82f6" },
-              { "name": "Personnel Care", "value": 28, "color": "#10b981" },
-              { "name": "Grocery", "value": 18, "color": "#f59e0b" },
-              { "name": "Baby&Kids", "value": 12, "color": "#ef4444" },
-              { "name": "Photo", "value": 7, "color": "#8b5cf6" }
+              { name: "Electronics", value: 35, color: "#3b82f6" },
+              { name: "Clothing", value: 28, color: "#10b981" },
+              { name: "Home & Garden", value: 18, color: "#f59e0b" },
+              { name: "Sports", value: 12, color: "#ef4444" },
+              { name: "Books", value: 7, color: "#8b5cf6" }
             ]
           }
         }
@@ -626,7 +573,13 @@ class MockAPIService {
   }
 
   private getRoleBasedResponse(endpoint: string, credentials?: any, mockData?: any): any {
-    const responseData = mockData || this.responses;
+    // If mockData is provided (from JSON file), use it directly
+    if (mockData) {
+      console.log('🎯 Using loaded mock data for endpoint:', endpoint, mockData);
+      return mockData;
+    }
+
+    const responseData = this.responses;
     
     if (endpoint === 'auth/login' && credentials) {
       let role: string = credentials.role || 'admin';
