@@ -160,6 +160,58 @@ class MockAPIService {
           }
         },
         error: { message: 'Failed to load campaign reports' }
+      },
+      'admin/placements': {
+        success: {
+          placements: [
+            {
+              id: 'pl_001',
+              name: 'POS_Small_Screen',
+              displayType: 'image_video',
+              orientation: 'landscape',
+              resolution: '1280x720',
+              dimensions: { width: 1280, height: 720 },
+              supportedFormats: ['MP4', 'JPG', 'PNG'],
+              maxFileSize: '50MB',
+              refreshRate: '30fps',
+              location: 'Point of Sale',
+              isActive: true,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            },
+            {
+              id: 'pl_002', 
+              name: 'Store_TV_55',
+              displayType: 'digital_signage',
+              orientation: 'landscape',
+              resolution: '1920x1080',
+              dimensions: { width: 1920, height: 1080 },
+              supportedFormats: ['MP4', 'JPG', 'PNG', 'GIF'],
+              maxFileSize: '100MB',
+              refreshRate: '60fps',
+              location: 'Store Display',
+              isActive: true,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            }
+          ]
+        },
+        error: { message: 'Failed to load placements' }
+      },
+      'admin/placements/create': {
+        success: {
+          id: 'pl_' + Date.now(),
+          message: 'Placement created successfully'
+        },
+        error: { message: 'Failed to create placement' }
+      },
+      'admin/placements/update': {
+        success: { message: 'Placement updated successfully' },
+        error: { message: 'Failed to update placement' }
+      },
+      'admin/placements/delete': {
+        success: { message: 'Placement deleted successfully' },
+        error: { message: 'Failed to delete placement' }
       }
     };
   }

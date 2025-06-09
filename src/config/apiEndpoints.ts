@@ -369,6 +369,50 @@ export const apiEndpointsConfig: ApiEndpointsConfiguration = {
       methods: ['GET', 'PUT'],
       requiresAuth: true,
       permissions: ['admin.settings.manage']
+    },
+    {
+      endpoint: 'admin/placements',
+      name: 'List Placements',
+      description: 'Get all placement configurations',
+      defaultMode: 'mock',
+      mockFile: 'admin-placements.json',
+      category: 'admin',
+      methods: ['GET'],
+      requiresAuth: true,
+      permissions: ['admin.placements.manage']
+    },
+    {
+      endpoint: 'admin/placements/create',
+      name: 'Create Placement',
+      description: 'Add new placement configuration',
+      defaultMode: 'mock',
+      mockFile: 'admin-placements.json',
+      category: 'admin',
+      methods: ['POST'],
+      requiresAuth: true,
+      permissions: ['admin.placements.manage']
+    },
+    {
+      endpoint: 'admin/placements/update',
+      name: 'Update Placement',
+      description: 'Update placement configuration',
+      defaultMode: 'mock',
+      mockFile: 'admin-placements.json',
+      category: 'admin',
+      methods: ['PUT'],
+      requiresAuth: true,
+      permissions: ['admin.placements.manage']
+    },
+    {
+      endpoint: 'admin/placements/delete',
+      name: 'Delete Placement',
+      description: 'Delete placement configuration',
+      defaultMode: 'mock',
+      mockFile: 'admin-placements.json',
+      category: 'admin',
+      methods: ['DELETE'],
+      requiresAuth: true,
+      permissions: ['admin.placements.manage']
     }
   ]
 };

@@ -8,6 +8,7 @@ import { Sidebar } from './Sidebar';
 import { CreateCampaign } from './CreateCampaign';
 import { Report1 } from './Report1';
 import { AddUsers } from './AddUsers';
+import { AddPlacements } from './AddPlacements';
 
 // Helper function to get page title from route
 const getPageTitle = (route: string) => {
@@ -138,6 +139,11 @@ const getRouteContent = (routePath: string, pageName: string, userRole?: string)
   if (cleanPath === '/addusers') {
     console.log('✅ Matched: AddUsers');
     return <AddUsers />;
+  }
+
+  if (cleanPath === '/addplacements') {
+    console.log('✅ Loading AddPlacements');
+    return <AddPlacements />;
   }
   
   console.log('⚠️ No match found, using DefaultContent');
