@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { MockAPIService } from '../services/mockApiService';
+import { useRouter } from 'next/router';
+import { roleDefaultRoutes } from '../config/roleDefaultRoutes';
 
 type UserRole = 'admin' | 'campaign_manager' | 'reports_only';
 
@@ -45,11 +47,7 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true, error: null, loginStatus: 'loading' });
         try {
           const mockAPI = MockAPIService.getInstance();
-          // Pass the role to the mock API so it returns the right user object
           const response = await mockAPI.makeRequest('auth/login', credentials, { method: 'POST' });
-
-          // If your mock returns users by role, select the correct one:
-          // e.g. response.data.user or response.user
           const user = response.data?.user || response.user;
 
           set({
@@ -58,6 +56,12 @@ export const useAuthStore = create<AuthStore>()(
             isLoading: false,
             loginStatus: 'idle'
           });
+
+          // Redirect to role-specific default route after login
+          if (typeof window !== 'undefined' && user) {
+            const redirectTo = roleDefaultRoutes[user.role] || '/';
+            window.location.replace(redirectTo);
+          }
         } catch (error: any) {
           set({
             error: error.message,
