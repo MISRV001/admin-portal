@@ -9,6 +9,7 @@ import { CreateCampaign } from './CreateCampaign';
 import { Report1 } from './Report1';
 import { AddUsers } from './AddUsers';
 import { AddPlacements } from './AddPlacements';
+import { canAccessRoute } from '../lib/permissionUtils';
 
 // Helper function to get page title from route
 const getPageTitle = (route: string) => {
@@ -210,7 +211,20 @@ export const MainContent: React.FC = () => {
 };
 
 // Dashboard Layout Component
-export const DashboardLayout: React.FC = () => {
+export function DashboardLayout() {
+  const { user } = useAuthStore();
+  const router = useRouter();
+  const routePath = router.asPath.split('?')[0].toLowerCase();
+
+  if (user && !canAccessRoute(user, routePath)) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <h1 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h1>
+        <p className="text-gray-700">You do not have permission to view this page.</p>
+      </div>
+    );
+  }
+
   console.log('=== DASHBOARD LAYOUT RENDER ===');
   
   return (
@@ -222,4 +236,4 @@ export const DashboardLayout: React.FC = () => {
       </div>
     </div>
   );
-};
+}
