@@ -43,31 +43,28 @@ export const useAuthStore = create<AuthStore>()(
       // Actions
       login: async (credentials) => {
         set({ isLoading: true, error: null, loginStatus: 'loading' });
-        
         try {
           const mockAPI = MockAPIService.getInstance();
-          const response = await mockAPI.makeRequest('auth/login', credentials);
-          
-          set({ loginStatus: 'success' });
-          await new Promise(resolve => setTimeout(resolve, 1500));
-          
-          set({ 
-            user: response.user, 
-            isAuthenticated: true, 
+          // Pass the role to the mock API so it returns the right user object
+          const response = await mockAPI.makeRequest('auth/login', credentials, { method: 'POST' });
+
+          // If your mock returns users by role, select the correct one:
+          // e.g. response.data.user or response.user
+          const user = response.data?.user || response.user;
+
+          set({
+            user,
+            isAuthenticated: true,
             isLoading: false,
             loginStatus: 'idle'
           });
         } catch (error: any) {
-          set({ 
-            error: error.message, 
+          set({
+            error: error.message,
             isLoading: false,
             loginStatus: 'error'
           });
-          
-          setTimeout(() => {
-            set({ loginStatus: 'idle' });
-          }, 2000);
-          
+          setTimeout(() => set({ loginStatus: 'idle' }), 2000);
           throw error;
         }
       },
