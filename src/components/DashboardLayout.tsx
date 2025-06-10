@@ -216,11 +216,20 @@ export function DashboardLayout() {
   const router = useRouter();
   const routePath = router.asPath.split('?')[0].toLowerCase();
 
-  if (user && !canAccessRoute(user, routePath)) {
+  // Default: allow access if route is not mapped (fallback to '/')
+  const isAllowed = !user || canAccessRoute(user, routePath) || routePath === '/';
+
+  if (user && !isAllowed) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <h1 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h1>
-        <p className="text-gray-700">You do not have permission to view this page.</p>
+        <p className="text-gray-700 mb-6">You do not have permission to view this page.</p>
+        <button
+          onClick={() => router.push('/')}
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+        >
+          Go to Dashboard
+        </button>
       </div>
     );
   }
