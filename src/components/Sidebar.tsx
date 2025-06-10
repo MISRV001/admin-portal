@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { ChevronDown, ChevronRight, Menu, X, User, LogOut } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
@@ -20,22 +20,24 @@ const CollapsibleMenuItem: React.FC<CollapsibleMenuItemProps> = ({
   isCollapsed, 
   isMobile = false 
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const { closeMobileMenu } = useNavigationStore();
 
+  // Helper to get route from page name
   const getRoute = (pageName: string) => {
     if (pageName === 'Dashboard') return '/';
     return `/${pageName.toLowerCase().replace(/\s+/g, '')}`;
   };
 
-  const handleNavigation = (pageName: string) => {
-    const route = getRoute(pageName);
-    router.push(route);
-    if (isMobile) {
-      closeMobileMenu();
-    }
-  };
+  // Determine if any child is active
+  const isAnyChildActive = children.some(child => getRoute(child.name) === router.asPath);
+
+  // Open if any child is active
+  const [isOpen, setIsOpen] = useState(isAnyChildActive);
+
+  // Keep open when route changes and a child is active
+  useEffect(() => {
+    if (isAnyChildActive) setIsOpen(true);
+  }, [router.asPath]);
 
   if (isCollapsed && !isMobile) {
     return (
@@ -63,17 +65,25 @@ const CollapsibleMenuItem: React.FC<CollapsibleMenuItemProps> = ({
         {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
       </button>
       {isOpen && (
-        <div className="ml-6 space-y-1">
-          {children.map((child, index) => (
-            <button
-              key={index}
-              onClick={() => handleNavigation(child.name)}
-              className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors text-left"
-            >
-              {child.icon}
-              <span className="text-sm text-gray-600">{child.name}</span>
-            </button>
-          ))}
+        <div className="pl-8 space-y-1">
+          {children.map(child => {
+            const route = getRoute(child.name);
+            const isActive = router.asPath === route;
+            return (
+              <button
+                key={child.name}
+                onClick={() => router.push(route)}
+                className={`w-full flex items-center p-2 rounded-lg transition-colors ${
+                  isActive
+                    ? 'bg-blue-100 text-blue-700 font-semibold'
+                    : 'hover:bg-gray-100 text-gray-700'
+                }`}
+              >
+                {child.icon}
+                <span className="ml-2">{child.name}</span>
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

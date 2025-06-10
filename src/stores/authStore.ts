@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { MockAPIService } from '../services/mockApiService';
+import { useRouter } from 'next/router';
+import { roleDefaultRoutes } from '../config/roleDefaultRoutes';
 
 type UserRole = 'admin' | 'campaign_manager' | 'reports_only';
 
@@ -43,31 +45,30 @@ export const useAuthStore = create<AuthStore>()(
       // Actions
       login: async (credentials) => {
         set({ isLoading: true, error: null, loginStatus: 'loading' });
-        
         try {
           const mockAPI = MockAPIService.getInstance();
-          const response = await mockAPI.makeRequest('auth/login', credentials);
-          
-          set({ loginStatus: 'success' });
-          await new Promise(resolve => setTimeout(resolve, 1500));
-          
-          set({ 
-            user: response.user, 
-            isAuthenticated: true, 
+          const response = await mockAPI.makeRequest('auth/login', credentials, { method: 'POST' });
+          const user = response.data?.user || response.user;
+
+          set({
+            user,
+            isAuthenticated: true,
             isLoading: false,
             loginStatus: 'idle'
           });
+
+          // Redirect to role-specific default route after login
+          if (typeof window !== 'undefined' && user) {
+            const redirectTo = roleDefaultRoutes[user.role] || '/';
+            window.location.replace(redirectTo);
+          }
         } catch (error: any) {
-          set({ 
-            error: error.message, 
+          set({
+            error: error.message,
             isLoading: false,
             loginStatus: 'error'
           });
-          
-          setTimeout(() => {
-            set({ loginStatus: 'idle' });
-          }, 2000);
-          
+          setTimeout(() => set({ loginStatus: 'idle' }), 2000);
           throw error;
         }
       },

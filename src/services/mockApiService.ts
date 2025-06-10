@@ -422,7 +422,13 @@ class MockAPIService {
   }
 
   // Main API method
-  async makeRequest(endpoint: string, data?: any, config: MockConfig = {}): Promise<any> {
+  async makeRequest(endpoint: string, data: any, options?: any) {
+    if (endpoint === 'auth/login') {
+      const res = await fetch('/mock/responses/auth-login.json');
+      const usersByRole = await res.json();
+      const role = data.role || 'admin';
+      return usersByRole[role];
+    }
     const { 
       delay,
       shouldFail = false,
@@ -431,7 +437,7 @@ class MockAPIService {
       simulateSlowResponse = false,
       method = 'GET',
       forceMode
-    } = config;
+    } = options || {};
 
     // Determine which mode to use for this specific endpoint
     let endpointMode: 'live' | 'mock';

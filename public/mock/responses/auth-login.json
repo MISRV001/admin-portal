@@ -1,12 +1,47 @@
 {
-  "status": "success",
-  "message": "Login successful",
-  "data": {
+  "admin": {
     "user": {
-      "id": "12345",
-      "username": "johndoe",
-      "email": "johndoe@example.com",
-      "token": "abcdef123456",
+      "id": "1",
+      "username": "adminuser",
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "role": "admin",
+      "permissions": [
+        "admin.users.manage", "admin.roles.manage", "admin.placements.manage",
+        "admin.conditions.manage", "campaigns.create", "campaigns.edit",
+        "campaigns.delete", "campaigns.publish", "campaigns.preview",
+        "stores.manage", "stores.health", "reports.view_all", "reports.export"
+      ],
+      "token": "admin-token",
+      "expires_in": 3600
+    }
+  },
+  "campaign_manager": {
+    "user": {
+      "id": "2",
+      "username": "campaignmanager",
+      "name": "Campaign Manager",
+      "email": "campaign@example.com",
+      "role": "campaign_manager",
+      "permissions": [
+        "campaigns.create", "campaigns.edit", "campaigns.publish", "campaigns.preview",
+        "stores.manage", "stores.health", "reports.view_all"
+      ],
+      "token": "campaign-token",
+      "expires_in": 3600
+    }
+  },
+  "reports_only": {
+    "user": {
+      "id": "3",
+      "username": "reportsuser",
+      "name": "Reports User",
+      "email": "reports@example.com",
+      "role": "reports_only",
+      "permissions": [
+        "reports.view_all", "reports.export"
+      ],
+      "token": "reports-token",
       "expires_in": 3600
     }
   }
