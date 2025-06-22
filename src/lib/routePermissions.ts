@@ -6,6 +6,7 @@ export const routePermissions: Record<string, string | Record<string, string>> =
     // Add more roles as needed
   },
   '/addusers': 'admin.users.manage',
+   '/rolePermissions': 'admin.users.manage',
   '/addplacements': 'admin.placements.manage',
   '/createcampaign': 'campaigns.create',
   '/publishcampaign': 'campaigns.publish',

@@ -18,7 +18,7 @@ export const getNavigationItems = (userRole: UserRole, permissions: string[]): N
       requiredRole: ['admin'],
       children: [
         { name: 'Email Invites', icon: <Mail className="w-4 h-4" />, permission: 'admin.users.manage' },
-        { name: 'Roles to Feature Mapping', icon: <Settings className="w-4 h-4" />, permission: 'admin.roles.manage' },
+        { name: 'Feature Permissions', icon: <Settings className="w-4 h-4" />, permission: 'admin.roles.manage' },
         { name: 'Add Users', icon: <UserPlus className="w-4 h-4" />, permission: 'admin.users.manage' },
         { name: 'Add Placements', icon: <MapPin className="w-4 h-4" />, permission: 'admin.placements.manage' },
         { name: 'Campaign Conditions', icon: <Filter className="w-4 h-4" />, permission: 'admin.conditions.manage' }

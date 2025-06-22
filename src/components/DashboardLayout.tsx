@@ -9,6 +9,7 @@ import { CreateCampaign } from './CreateCampaign';
 import { Report1 } from './Report1';
 import { AddUsers } from './AddUsers';
 import { AddPlacements } from './AddPlacements';
+import { FeaturePermissions} from './FeaturePermissions';
 import { canAccessRoute } from '../lib/permissionUtils';
 
 // Helper function to get page title from route
@@ -19,6 +20,8 @@ const getPageTitle = (route: string) => {
     '/emailinvites': 'Email Invites',
     '/rolestofeaturemapping': 'Roles to Feature Mapping',
     '/addusers': 'Add Users',
+    '/rolepermissions': 'Role Permissions',
+    '/featurepermissions': 'Feature Permissions',
     '/addplacements': 'Add Placements',
     '/campaignconditions': 'Campaign Conditions',
     '/createcampaign': 'Create Campaign',
@@ -145,6 +148,11 @@ const getRouteContent = (routePath: string, pageName: string, userRole?: string)
   if (cleanPath === '/addplacements') {
     console.log('✅ Loading AddPlacements');
     return <AddPlacements />;
+  }
+  
+  if (cleanPath === '/featurepermissions') {
+    console.log('✅ Matched: FeaturePermissions');
+    return <FeaturePermissions />;
   }
   
   console.log('⚠️ No match found, using DefaultContent');
