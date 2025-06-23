@@ -1,0 +1,10 @@
+{
+  "templates": [
+    { "label": "Single Image (Static)", "value": "single", "duration": 0, "recommended": true },
+    { "label": "Slideshow (1s)", "value": "slideshow", "duration": 1000 },
+    { "label": "Carousel (3s)", "value": "carousel", "duration": 3000 },
+    { "label": "Fade Transition (4s)", "value": "fade", "duration": 4000 },
+    { "label": "Split Screen (5s)", "value": "split", "duration": 5000 },
+    { "label": "Screensaver (6s)", "value": "screensaver", "duration": 6000 }
+  ]
+}
