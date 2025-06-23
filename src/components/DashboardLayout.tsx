@@ -11,6 +11,7 @@ import { AddUsers } from './AddUsers';
 import { AddPlacements } from './AddPlacements';
 import { FeaturePermissions} from './FeaturePermissions';
 import { canAccessRoute } from '../lib/permissionUtils';
+import { PublishCampaign } from './PublishCampaign';
 
 // Helper function to get page title from route
 const getPageTitle = (route: string) => {
@@ -155,6 +156,14 @@ const getRouteContent = (routePath: string, pageName: string, userRole?: string)
     return <FeaturePermissions />;
   }
   
+  if (cleanPath === '/publishcampaign') { 
+    console.log('✅ Matched: PublishCampaign');
+    return <PublishCampaign />;
+  }
+  if (cleanPath === '/previewcampaign') {
+    console.log('✅ Matched: PreviewCampaign');
+    return <PublishCampaign previewMode={true} />;
+  }
   console.log('⚠️ No match found, using DefaultContent');
   return <DefaultContent pageName={pageName} userRole={userRole} />;
 };

@@ -2,28 +2,136 @@
   "campaigns": [
     {
       "id": 1,
-      "name": "Campaign 1",
-      "status": "active",
-      "startDate": "2023-01-01",
-      "endDate": "2023-01-31",
-      "budget": 1000
+      "name": "Northeast Electronics Sale",
+      "status": "published",
+      "zone": "northeast",
+      "city": "nyc",
+      "store": "STORE001",
+      "startDate": "2025-06-01",
+      "endDate": "2025-06-30",
+      "budget": 10000
     },
     {
       "id": 2,
-      "name": "Campaign 2",
-      "status": "inactive",
-      "startDate": "2023-02-01",
-      "endDate": "2023-02-28",
-      "budget": 1500
+      "name": "West Coast Summer Promo",
+      "status": "draft",
+      "zone": "west",
+      "city": "la",
+      "store": "STORE002",
+      "startDate": "2025-07-01",
+      "endDate": "2025-07-31",
+      "budget": 8000
     },
     {
       "id": 3,
-      "name": "Campaign 3",
-      "status": "active",
-      "startDate": "2023-03-01",
-      "endDate": "2023-03-31",
-      "budget": 2000
+      "name": "Midwest Back to School",
+      "status": "published",
+      "zone": "midwest",
+      "city": "chicago",
+      "store": "STORE003",
+      "startDate": "2025-08-01",
+      "endDate": "2025-08-31",
+      "budget": 12000
+    },
+    {
+      "id": 4,
+      "name": "Southwest Fiesta",
+      "status": "draft",
+      "zone": "southwest",
+      "city": "houston",
+      "store": "STORE004",
+      "startDate": "2025-09-01",
+      "endDate": "2025-09-30",
+      "budget": 9000
+    },
+    {
+      "id": 5,
+      "name": "Southeast Holiday Deals",
+      "status": "published",
+      "zone": "southeast",
+      "city": "miami",
+      "store": "STORE040",
+      "startDate": "2025-12-01",
+      "endDate": "2025-12-31",
+      "budget": 15000
+    },
+    {
+      "id": 6,
+      "name": "West Tech Expo",
+      "status": "draft",
+      "zone": "west",
+      "city": "sf",
+      "store": "STORE016",
+      "startDate": "2025-10-01",
+      "endDate": "2025-10-31",
+      "budget": 11000
+    },
+    {
+      "id": 7,
+      "name": "Midwest Winter Warmup",
+      "status": "published",
+      "zone": "midwest",
+      "city": "milwaukee",
+      "store": "STORE031",
+      "startDate": "2025-11-01",
+      "endDate": "2025-11-30",
+      "budget": 9500
+    },
+    {
+      "id": 8,
+      "name": "Northeast Spring Launch",
+      "status": "draft",
+      "zone": "northeast",
+      "city": "boston",
+      "store": "STORE021",
+      "startDate": "2025-03-01",
+      "endDate": "2025-03-31",
+      "budget": 10500
+    },
+    {
+      "id": 9,
+      "name": "Southwest Tech Days",
+      "status": "published",
+      "zone": "southwest",
+      "city": "phoenix",
+      "store": "STORE005",
+      "startDate": "2025-04-01",
+      "endDate": "2025-04-30",
+      "budget": 9800
+    },
+    {
+      "id": 10,
+      "name": "Southeast Summer Bash",
+      "status": "draft",
+      "zone": "southeast",
+      "city": "atlanta",
+      "store": "STORE037",
+      "startDate": "2025-05-01",
+      "endDate": "2025-05-31",
+      "budget": 10200
+    },
+    {
+      "id": 11,
+      "name": "West Coast Black Friday",
+      "status": "published",
+      "zone": "west",
+      "city": "sandiego",
+      "store": "STORE008",
+      "startDate": "2025-11-20",
+      "endDate": "2025-11-27",
+      "budget": 20000
+    },
+    {
+      "id": 12,
+      "name": "Midwest Spring Savings",
+      "status": "draft",
+      "zone": "midwest",
+      "city": "columbus",
+      "store": "STORE014",
+      "startDate": "2025-03-15",
+      "endDate": "2025-04-15",
+      "budget": 8700
     }
   ],
-  "total": 3
+  "total": 12
 }
