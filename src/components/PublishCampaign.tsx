@@ -24,6 +24,7 @@ export const PublishCampaign: React.FC = () => {
   const [confirmAction, setConfirmAction] = useState<{ type: 'publish' | 'delete'; id: number } | null>(null);
   const [selectedState, setSelectedState] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
+  const [showEditInfo, setShowEditInfo] = useState<number|null>(null);
 
   useEffect(() => {
     api.loadMockFile('locations-list.json').then((data) => setZones(data.regions));
@@ -85,19 +86,33 @@ export const PublishCampaign: React.FC = () => {
     setEditId(null);
   };
 
-  // Helper to check if campaign is editable (not running now and start date > 2 days from now)
-  const isEditable = (startDate: string, endDate: string) => {
-    if (!startDate) return false;
+  // Helper to get campaign status
+  const getCampaignStatus = (c: any) => {
     const now = new Date();
     now.setHours(0,0,0,0);
-    const start = new Date(startDate);
-    const end = endDate ? new Date(endDate) : null;
-    const minEditDate = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000);
-    // Not editable if campaign is running now
-    if (start <= now && (!end || end >= now)) return false;
-    // Not editable if start date is within 2 days
-    if (start <= minEditDate) return false;
-    return true;
+    const start = c.startDate ? new Date(c.startDate) : null;
+    const end = c.endDate ? new Date(c.endDate) : null;
+    if (c.status === 'published') {
+      if (start && end && start <= now && now <= end) {
+        return 'Published Running';
+      }
+      if (end && end < now) {
+        return 'Expired';
+      }
+      if (start && start > now) {
+        return 'Published';
+      }
+      return 'Published';
+    }
+    if (end && end < now) {
+      return 'Expired';
+    }
+    return c.status.charAt(0).toUpperCase() + c.status.slice(1);
+  };
+
+  // Helper to check if campaign is editable (not Published Running)
+  const isEditable = (c: any) => {
+    return getCampaignStatus(c) !== 'Published Running';
   };
 
   return (
@@ -128,49 +143,58 @@ export const PublishCampaign: React.FC = () => {
             <table className="min-w-full whitespace-nowrap bg-white text-sm">
               <thead className="bg-gradient-to-r from-blue-100 to-purple-100">
                 <tr>
-                  {['name','description','status','startDate','endDate'].map((key) => (
+                  {["name","description","status","startDate","endDate"].map((key) => (
                     <th key={key} className="px-2 py-2 text-left font-semibold text-blue-700 cursor-pointer select-none" onClick={() => {
                       if (sortKey === key) setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
                       else { setSortKey(key); setSortDir('asc'); }
                     }}>
                       {key.charAt(0).toUpperCase() + key.slice(1)}
-                      {sortKey === key && (sortDir === 'asc' ? ' ▲' : ' ▼')}
+                      {sortKey === key && (
+                        <span className="ml-1">{sortDir === 'asc' ? '▲' : '▼'}</span>
+                      )}
                     </th>
                   ))}
                   <th className="px-2 py-2 text-left font-semibold text-blue-700">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {loading ? Array.from({length: PAGE_SIZE}).map((_,i) => (
-                  <tr key={i} className="border-t animate-pulse">
-                    {Array.from({length:6}).map((_,j) => (
-                      <td key={j} className="px-2 py-2"><div className="h-4 bg-gray-200 rounded w-3/4 mx-auto" /></td>
-                    ))}
-                  </tr>
-                )) : campaigns.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="text-center py-8 text-blue-700 font-semibold">No active campaign is running</td>
-                  </tr>
-                ) : campaigns.map(c => (
-                  <tr key={c.id} className="border-t hover:bg-blue-50 transition">
-                    <td className="px-2 py-2 font-medium text-gray-900 truncate max-w-[180px]">{c.name}</td>
-                    <td className="px-2 py-2 text-gray-700 truncate max-w-[220px]">{c.description || '-'}</td>
-                    <td className="px-2 py-2">
-                      <span className={`px-2 py-1 rounded text-xs font-semibold ${c.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>{c.status}</span>
-                    </td>
-                    <td className="px-2 py-2">{c.startDate}</td>
-                    <td className="px-2 py-2">{c.endDate}</td>
-                    <td className="px-2 py-2">
-                      <div className="flex flex-col gap-2 items-stretch">
-                        <Button variant="secondary" size="sm" className="w-full" onClick={() => handleEdit(c)} disabled={!isEditable(c.startDate, c.endDate)} title={isEditable(c.startDate, c.endDate) ? '' : 'Can only edit if campaign is not running and start date is at least 2 days from today'}>Edit</Button>
-                        <Button variant={c.status === 'published' ? 'outline' : 'default'} size="sm" className={`w-full ${c.status !== 'published' ? 'bg-green-600 text-white hover:bg-green-700' : ''}`} onClick={() => handlePublish(c.id)}>
-                          {c.status === 'published' ? 'Unpublish' : 'Publish'}
-                        </Button>
-                        <Button variant="destructive" size="sm" className="w-full" onClick={() => handleDelete(c.id)}>Delete</Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {loading ? (
+                  <tr><td colSpan={6} className="py-8 text-center text-gray-400">Loading campaigns...</td></tr>
+                ) : campaigns.length === 0 ? (
+                  <tr><td colSpan={6} className="py-8 text-center text-gray-400">No active campaign is running</td></tr>
+                ) : campaigns.map(c => {
+                  const status = getCampaignStatus(c);
+                  const editable = isEditable(c);
+                  return (
+                    <tr key={c.id} className="border-t hover:bg-blue-50 transition">
+                      <td className="px-2 py-2 font-medium text-gray-900 truncate max-w-[180px]">{c.name}</td>
+                      <td className="px-2 py-2 text-gray-700 truncate max-w-[220px]">{c.description || '-'}</td>
+                      <td className="px-2 py-2">
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${status === 'Published Running' ? 'bg-green-100 text-green-700' : status === 'Expired' ? 'bg-gray-200 text-gray-500' : status === 'Published' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700'}`}>{status}</span>
+                      </td>
+                      <td className="px-2 py-2">{c.startDate}</td>
+                      <td className="px-2 py-2">{c.endDate}</td>
+                      <td className="px-2 py-2">
+                        <div className="flex flex-col gap-2 items-stretch">
+                          <div className="relative group">
+                            <Button variant="secondary" size="sm" className="w-full" onClick={() => editable ? handleEdit(c) : setShowEditInfo(c.id)} disabled={!editable} onMouseEnter={() => !editable && setShowEditInfo(c.id)} onMouseLeave={() => setShowEditInfo(null)}>
+                              Edit
+                            </Button>
+                            {!editable && showEditInfo === c.id && (
+                              <div className="absolute left-full top-0 ml-2 z-20 bg-white border border-gray-300 rounded shadow-lg p-3 w-64 text-xs text-gray-700 animate-fadein">
+                                You can only edit a campaign if it is not <b>Published Running</b>.<br/>To edit, unpublish or wait until the campaign is not running.
+                              </div>
+                            )}
+                          </div>
+                          <Button variant={c.status === 'published' ? 'outline' : 'default'} size="sm" className={`w-full ${c.status !== 'published' ? 'bg-green-600 text-white hover:bg-green-700' : ''}`} onClick={() => handlePublish(c.id)}>
+                            {c.status === 'published' ? 'Unpublish' : 'Publish'}
+                          </Button>
+                          <Button variant="destructive" size="sm" className="w-full" onClick={() => handleDelete(c.id)}>Delete</Button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -257,6 +281,19 @@ export const PublishCampaign: React.FC = () => {
                     <Button type="submit" variant="default">Update</Button>
                   </div>
                 </form>
+              </div>
+            </div>
+          )}
+          {/* Edit Info Modal */}
+          {showEditInfo && (
+            <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+              <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-md relative animate-fadein">
+                <button className="absolute top-3 right-3 text-gray-400 hover:text-red-500" onClick={() => setShowEditInfo(null)}>&times;</button>
+                <h3 className="text-lg font-bold mb-4 text-blue-700">Edit Not Allowed</h3>
+                <p className="mb-6 text-gray-700">You can only edit a campaign if it is not running ("Published Running").<br />Please unpublish or wait until the campaign is not running to edit.</p>
+                <div className="flex justify-end">
+                  <Button variant="default" onClick={() => setShowEditInfo(null)}>OK</Button>
+                </div>
               </div>
             </div>
           )}
