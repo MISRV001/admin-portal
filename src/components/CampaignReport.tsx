@@ -18,7 +18,7 @@ interface ReportData {
   };
 }
 
-export const Report1: React.FC = () => {
+export const CampaignReport: React.FC = () => {
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

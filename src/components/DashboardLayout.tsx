@@ -6,7 +6,7 @@ import { useAuthStore } from '../stores/authStore';
 import { useNavigationStore } from '../stores/navigationStore';
 import { Sidebar } from './Sidebar';
 import { CreateCampaign } from './CreateCampaign';
-import { Report1 } from './Report1';
+import { CampaignReport } from './CampaignReport';
 import { AddUsers } from './AddUsers';
 import { AddPlacements } from './AddPlacements';
 import { FeaturePermissions} from './FeaturePermissions';
@@ -29,7 +29,7 @@ const getPageTitle = (route: string) => {
     '/previewcampaign': 'Preview Campaign',
     '/posstoresdevice': 'POS Stores/Device',
     '/devicehealth': 'Device Health',
-    '/report1': 'Campaign Performance Report',
+    '/campaignreport': 'Campaign Performance Report',
     '/report2': 'Store Performance Report',
     '/report3': 'Inventory Report',
   };
@@ -135,9 +135,9 @@ const getRouteContent = (routePath: string, pageName: string, userRole?: string)
     return <CreateCampaign />;
   }
   
-  if (cleanPath === '/report1') {
-    console.log('✅ Matched: Report1');
-    return <Report1 />;
+  if (cleanPath === '/campaignreport') {
+    console.log('✅ Matched: CampaignReport');
+    return <CampaignReport />;
   }
   
   if (cleanPath === '/addusers') {

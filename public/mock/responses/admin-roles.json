@@ -11,7 +11,19 @@
         "campaigns.preview": "view",
         "stores.manage": "edit",
         "stores.health": "view",
-        "reports.view_all": "view"
+        "reports.view_all": "view",
+        "featurepermissions": "edit",
+        "addusers": "edit",
+        "addplacements": "edit",
+        "campaignconditions": "edit",
+        "createcampaign": "edit",
+        "publishcampaign": "edit",
+        "previewcampaign": "view",
+        "posstoresdevice": "edit",
+        "devicehealth": "view",
+        "report1": "view",
+        "report2": "view",
+        "report3": "view"
       }
     },
     {
@@ -20,13 +32,36 @@
         "campaigns.create": "edit",
         "campaigns.publish": "edit",
         "campaigns.preview": "view",
-        "reports.view_all": "view"
+        "reports.view_all": "view",
+        "createcampaign": "edit",
+        "publishcampaign": "edit",
+        "previewcampaign": "view",
+        "report1": "view",
+        "report2": "view",
+        "report3": "view"
       }
     },
     {
       "name": "reports_only",
       "permissions": {
-        "reports.view_all": "view"
+        "reports.view_all": "view",
+        "report1": "view",
+        "report2": "view",
+        "report3": "view"
+      }
+    },
+    {
+      "name": "pos_admin",
+      "permissions": {
+         "addplacements": "edit",
+         "stores.manage": "edit",
+        "stores.health": "edit",
+        "posstoresdevice": "edit",
+        "devicehealth": "edit",
+        "reports.view_all": "view",
+        "report1": "view",
+        "report2": "view",
+        "report3": "view"
       }
     }
   ]

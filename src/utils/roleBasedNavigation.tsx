@@ -1,7 +1,7 @@
 import React from 'react';
 import { Shield, Target, Store, BarChart3, Mail, Settings, UserPlus, MapPin, Filter, PlusCircle, Eye, Play, Monitor, Activity } from 'lucide-react';
 
-type UserRole = 'admin' | 'campaign_manager' | 'reports_only';
+type UserRole = 'admin' | 'campaign_manager' | 'reports_only' | 'pos_admin';
 
 interface NavigationItem {
   title: string;
@@ -17,10 +17,9 @@ export const getNavigationItems = (userRole: UserRole, permissions: string[]): N
       icon: <Shield className="w-5 h-5 text-blue-600" />,
       requiredRole: ['admin'],
       children: [
-        { name: 'Email Invites', icon: <Mail className="w-4 h-4" />, permission: 'admin.users.manage' },
-        { name: 'Feature Permissions', icon: <Settings className="w-4 h-4" />, permission: 'admin.roles.manage' },
         { name: 'Add Users', icon: <UserPlus className="w-4 h-4" />, permission: 'admin.users.manage' },
-        { name: 'Add Placements', icon: <MapPin className="w-4 h-4" />, permission: 'admin.placements.manage' },
+        { name: 'Manage Users', icon: <Mail className="w-4 h-4" />, permission: 'admin.users.manage' },
+        { name: 'Feature Permissions', icon: <Settings className="w-4 h-4" />, permission: 'admin.roles.manage' },
         { name: 'Campaign Conditions', icon: <Filter className="w-4 h-4" />, permission: 'admin.conditions.manage' }
       ]
     },
@@ -37,20 +36,21 @@ export const getNavigationItems = (userRole: UserRole, permissions: string[]): N
     {
       title: 'Store Management',
       icon: <Store className="w-5 h-5 text-purple-600" />,
-      requiredRole: ['admin'],
+      requiredRole: ['admin', 'pos_admin'],
       children: [
-        { name: 'POS Stores/Device', icon: <Monitor className="w-4 h-4" />, permission: 'stores.manage' },
-        { name: 'Device Health', icon: <Activity className="w-4 h-4" />, permission: 'stores.health' }
+        { name: 'POS Stores/Device', icon: <Monitor className="w-4 h-4" />, permission: 'posstoresdevice' },
+        { name: 'Add Placements', icon: <MapPin className="w-4 h-4" />, permission: 'addplacements' }
       ]
     },
     {
       title: 'Reports',
       icon: <BarChart3 className="w-5 h-5 text-orange-600" />,
-      requiredRole: ['admin', 'campaign_manager', 'reports_only'],
+      requiredRole: ['admin', 'campaign_manager', 'reports_only', 'pos_admin'],
       children: [
-        { name: 'Report 1', icon: <BarChart3 className="w-4 h-4" />, permission: 'reports.view_all' },
-        { name: 'Report 2', icon: <BarChart3 className="w-4 h-4" />, permission: 'reports.view_all' },
-        { name: 'Report 3', icon: <BarChart3 className="w-4 h-4" />, permission: 'reports.view_all' }
+        { name: 'Campaign Report', icon: <BarChart3 className="w-4 h-4" />, permission: 'reports.view_all' },
+        { name: 'Store Performance Report', icon: <BarChart3 className="w-4 h-4" />, permission: 'reports.view_all' },
+        { name: 'Device Health', icon: <Activity className="w-4 h-4" />, permission: 'devicehealth' },
+        { name: 'Inventory Report', icon: <BarChart3 className="w-4 h-4" />, permission: 'reports.view_all' }
       ]
     }
   ];

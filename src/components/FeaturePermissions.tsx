@@ -13,6 +13,7 @@ const ALL_ROLES = [
   { label: 'Admin', value: 'admin' },
   { label: 'Campaign Manager', value: 'campaign_manager' },
   { label: 'Report Analyst', value: 'reports_only' },
+  { label: 'POS-Admin', value: 'pos_admin' },
   { label: 'Create New Role...', value: 'new' }
 ];
 
@@ -98,7 +99,7 @@ export const FeaturePermissions: React.FC = () => {
       <CardContent>
         <div className="mb-6 flex items-center gap-4">
           <Label htmlFor="role">Role:</Label>
-          <Select value={selectedRole} onValueChange={setSelectedRole} id="role">
+          <Select value={selectedRole} onValueChange={setSelectedRole}>
             <SelectTrigger className="w-56">
               {ALL_ROLES.find(r => r.value === selectedRole)?.label ?? ''}
             </SelectTrigger>
