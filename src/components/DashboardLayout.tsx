@@ -12,6 +12,7 @@ import { AddPlacements } from './AddPlacements';
 import { FeaturePermissions} from './FeaturePermissions';
 import { canAccessRoute } from '../lib/permissionUtils';
 import { PublishCampaign } from './PublishCampaign';
+import { ConditionsListPage } from './ConditionsListPage';
 
 // Helper function to get page title from route
 const getPageTitle = (route: string) => {
@@ -163,6 +164,10 @@ const getRouteContent = (routePath: string, pageName: string, userRole?: string)
   if (cleanPath === '/previewcampaign') {
     console.log('✅ Matched: PreviewCampaign');
     return <PublishCampaign previewMode={true} />;
+  }
+  // Add custom route for campaignconditions
+  if (cleanPath === '/campaignconditions') {
+    return <ConditionsListPage />;
   }
   console.log('⚠️ No match found, using DefaultContent');
   return <DefaultContent pageName={pageName} userRole={userRole} />;
