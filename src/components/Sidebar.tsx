@@ -91,9 +91,33 @@ export const Sidebar: React.FC<{ permissions?: Record<string, string>, sidebarRo
   // Use permissions from server (SSR/SSG) or fallback to empty object
   const sidebarPermissions = serverPermissions || {};
 
-  // Use navigationItems hook, but wait for user to be defined
-  const navigationItems = useNavigationItems(user?.role || 'admin', sidebarPermissions, sidebarRoutes);
-  console.log('[SIDEBAR DEBUG] navigationItems:', navigationItems);
+  // Only render navigationItems when user and sidebarRoutes are available
+  const ready = !!user && Array.isArray(sidebarRoutes) && sidebarRoutes.length > 0;
+  const sidebarApiFailed = !sidebarRoutes || !Array.isArray(sidebarRoutes) || sidebarRoutes.length === 0;
+
+  // Detect if the sidebar-permissions.json file is missing (ENOENT error)
+  // This should be handled in getServerSideProps/pages, but if SSR passes empty or undefined, treat as API error here
+  if (sidebarApiFailed) {
+    return (
+      <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-50">
+        <div className="text-4xl mb-4 text-blue-600">⚠️</div>
+        <div className="text-xl font-bold mb-2">Technical Issue</div>
+        <div className="text-gray-600 mb-6 text-center">
+          We are unable to load required permissions or navigation data.<br />
+          This may be due to a missing or unavailable API/mocks file.<br />
+          Please contact support or try again later.
+        </div>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  const navigationItems = ready ? useNavigationItems(user?.role || 'admin', sidebarPermissions, sidebarRoutes) : [];
 
   const DesktopSidebar = () => (
     <div className={`hidden lg:flex bg-white h-screen shadow-lg transition-all duration-300 flex-col ${sidebarCollapsed ? 'w-16' : 'w-80'}`}>
