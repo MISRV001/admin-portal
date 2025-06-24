@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { ChevronDown, ChevronRight, Menu, X, User, LogOut } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 import { useNavigationStore } from '../stores/navigationStore';
-import { getNavigationItems } from '../utils/roleBasedNavigation';
+import { useNavigationItems } from '../utils/roleBasedNavigation';
 
 interface CollapsibleMenuItemProps {
   title: string;
   icon: React.ReactNode;
-  children: { name: string; icon: React.ReactNode }[];
+  children: { name: string; icon: React.ReactNode; route: string }[];
   isCollapsed: boolean;
   isMobile?: boolean;
 }
@@ -22,20 +22,14 @@ const CollapsibleMenuItem: React.FC<CollapsibleMenuItemProps> = ({
 }) => {
   const router = useRouter();
 
-  // Helper to get route from page name
-  const getRoute = (pageName: string) => {
-    if (pageName === 'Dashboard') return '/';
-    return `/${pageName.toLowerCase().replace(/\s+/g, '')}`;
-  };
-
   // Determine if any child is active
-  const isAnyChildActive = children.some(child => getRoute(child.name) === router.asPath);
+  const isAnyChildActive = children.some(child => child.route === router.asPath);
 
   // Open if any child is active
   const [isOpen, setIsOpen] = useState(isAnyChildActive);
 
   // Keep open when route changes and a child is active
-  useEffect(() => {
+  React.useEffect(() => {
     if (isAnyChildActive) setIsOpen(true);
   }, [router.asPath]);
 
@@ -67,12 +61,11 @@ const CollapsibleMenuItem: React.FC<CollapsibleMenuItemProps> = ({
       {isOpen && (
         <div className="pl-8 space-y-1">
           {children.map(child => {
-            const route = getRoute(child.name);
-            const isActive = router.asPath === route;
+            const isActive = router.asPath === child.route;
             return (
               <button
-                key={child.name}
-                onClick={() => router.push(route)}
+                key={child.route}
+                onClick={() => router.push(child.route)}
                 className={`w-full flex items-center p-2 rounded-lg transition-colors ${
                   isActive
                     ? 'bg-blue-100 text-blue-700 font-semibold'
@@ -90,12 +83,41 @@ const CollapsibleMenuItem: React.FC<CollapsibleMenuItemProps> = ({
   );
 };
 
-export const Sidebar: React.FC = () => {
+export const Sidebar: React.FC<{ permissions?: Record<string, string>, sidebarRoutes?: any[] }> = ({ permissions: serverPermissions, sidebarRoutes }) => {
   const { sidebarCollapsed, mobileMenuOpen, toggleSidebar, closeMobileMenu } = useNavigationStore();
   const { user, logout } = useAuthStore();
   const [showUserMenu, setShowUserMenu] = useState(false);
 
-  const navigationItems = user ? getNavigationItems(user.role, user.permissions) : [];
+  // Use permissions from server (SSR/SSG) or fallback to empty object
+  const sidebarPermissions = serverPermissions || {};
+
+  // Only render navigationItems when user and sidebarRoutes are available
+  const ready = !!user && Array.isArray(sidebarRoutes) && sidebarRoutes.length > 0;
+  const sidebarApiFailed = !sidebarRoutes || !Array.isArray(sidebarRoutes) || sidebarRoutes.length === 0;
+
+  // Detect if the sidebar-permissions.json file is missing (ENOENT error)
+  // This should be handled in getServerSideProps/pages, but if SSR passes empty or undefined, treat as API error here
+  if (sidebarApiFailed) {
+    return (
+      <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-50">
+        <div className="text-4xl mb-4 text-blue-600">⚠️</div>
+        <div className="text-xl font-bold mb-2">Technical Issue</div>
+        <div className="text-gray-600 mb-6 text-center">
+          We are unable to load required permissions or navigation data.<br />
+          This may be due to a missing or unavailable API/mocks file.<br />
+          Please contact support or try again later.
+        </div>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  const navigationItems = ready ? useNavigationItems(user?.role || 'admin', sidebarPermissions, sidebarRoutes) : [];
 
   const DesktopSidebar = () => (
     <div className={`hidden lg:flex bg-white h-screen shadow-lg transition-all duration-300 flex-col ${sidebarCollapsed ? 'w-16' : 'w-80'}`}>

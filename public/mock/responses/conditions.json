@@ -1,0 +1,62 @@
+[
+  {
+    "id": "cond1",
+    "name": "Northeast Hurricane Season",
+    "description": "Active during hurricane season in the Northeast US.",
+    "type": "GEOGRAPHICAL",
+    "operator": "IN",
+    "values": ["NY", "NJ", "CT", "MA"],
+    "metadata": { "region": "Northeast" },
+    "isActive": true,
+    "priority": 1,
+    "campaignId": null,
+    "createdAt": "2024-06-01T00:00:00Z",
+    "updatedAt": "2024-06-01T00:00:00Z",
+    "reach": 1200
+  },
+  {
+    "id": "cond2",
+    "name": "Hot Summer Days",
+    "description": "Trigger when temperature exceeds 85°F",
+    "type": "WEATHER",
+    "operator": "GREATER_THAN",
+    "values": [85],
+    "metadata": { "unit": "F" },
+    "isActive": true,
+    "priority": 2,
+    "campaignId": null,
+    "createdAt": "2024-06-01T00:00:00Z",
+    "updatedAt": "2024-06-01T00:00:00Z",
+    "reach": 800
+  },
+  {
+    "id": "cond3",
+    "name": "Senior Tuesday Discounts",
+    "description": "Discount for customers aged 60+ on Tuesdays.",
+    "type": "DEMOGRAPHIC",
+    "operator": "GREATER_THAN",
+    "values": [60],
+    "metadata": { "day": "Tuesday" },
+    "isActive": false,
+    "priority": 3,
+    "campaignId": null,
+    "createdAt": "2024-06-01T00:00:00Z",
+    "updatedAt": "2024-06-01T00:00:00Z",
+    "reach": 300
+  },
+  {
+    "id": "cond4",
+    "name": "Overstock Clearance",
+    "description": "Trigger when inventory exceeds 100 units.",
+    "type": "INVENTORY",
+    "operator": "GREATER_THAN",
+    "values": [100],
+    "metadata": { "sku": "ALL" },
+    "isActive": true,
+    "priority": 4,
+    "campaignId": null,
+    "createdAt": "2024-06-01T00:00:00Z",
+    "updatedAt": "2024-06-01T00:00:00Z",
+    "reach": 500
+  }
+]

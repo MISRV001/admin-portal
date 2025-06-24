@@ -1,0 +1,21 @@
+{
+  "weather": [
+    { "label": "Sunny", "value": "sunny" },
+    { "label": "Rainy", "value": "rainy" },
+    { "label": "Cloudy", "value": "cloudy" },
+    { "label": "Snowy", "value": "snowy" },
+    { "label": "Stormy", "value": "stormy" }
+  ],
+  "traffic": [
+    { "label": "Low", "value": "low" },
+    { "label": "Medium", "value": "medium" },
+    { "label": "High", "value": "high" },
+    { "label": "Peak Hours", "value": "peak" }
+  ],
+  "footfall": [
+    { "label": "Low", "value": "low" },
+    { "label": "Medium", "value": "medium" },
+    { "label": "High", "value": "high" },
+    { "label": "Very High", "value": "very_high" }
+  ]
+}

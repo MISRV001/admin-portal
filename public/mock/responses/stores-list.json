@@ -1,22 +1,44 @@
 {
   "stores": [
-    {
-      "id": 1,
-      "name": "Store A",
-      "location": "Location A",
-      "status": "open"
-    },
-    {
-      "id": 2,
-      "name": "Store B",
-      "location": "Location B",
-      "status": "closed"
-    },
-    {
-      "id": 3,
-      "name": "Store C",
-      "location": "Location C",
-      "status": "open"
-    }
+    { "id": "STORE001", "name": "Manhattan Central Store", "location": "New York City", "city": "nyc", "state": "NY", "zone": "northeast" },
+    { "id": "STORE002", "name": "Beverly Hills Flagship", "location": "Los Angeles", "city": "la", "state": "CA", "zone": "west" },
+    { "id": "STORE003", "name": "Chicago Downtown", "location": "Chicago", "city": "chicago", "state": "IL", "zone": "midwest" },
+    { "id": "STORE004", "name": "Houston Galleria", "location": "Houston", "city": "houston", "state": "TX", "zone": "southwest" },
+    { "id": "STORE005", "name": "Phoenix Desert Ridge", "location": "Phoenix", "city": "phoenix", "state": "AZ", "zone": "southwest" },
+    { "id": "STORE006", "name": "Philadelphia Liberty", "location": "Philadelphia", "city": "philly", "state": "PA", "zone": "northeast" },
+    { "id": "STORE007", "name": "San Antonio Riverwalk", "location": "San Antonio", "city": "sanantonio", "state": "TX", "zone": "southwest" },
+    { "id": "STORE008", "name": "San Diego Seaside", "location": "San Diego", "city": "sandiego", "state": "CA", "zone": "west" },
+    { "id": "STORE009", "name": "Dallas Uptown", "location": "Dallas", "city": "dallas", "state": "TX", "zone": "southwest" },
+    { "id": "STORE010", "name": "San Jose Tech Plaza", "location": "San Jose", "city": "sanjose", "state": "CA", "zone": "west" },
+    { "id": "STORE011", "name": "Austin Music District", "location": "Austin", "city": "austin", "state": "TX", "zone": "southwest" },
+    { "id": "STORE012", "name": "Jacksonville Beach", "location": "Jacksonville", "city": "jacksonville", "state": "FL", "zone": "southeast" },
+    { "id": "STORE013", "name": "Fort Worth Stockyards", "location": "Fort Worth", "city": "fortworth", "state": "TX", "zone": "southwest" },
+    { "id": "STORE014", "name": "Columbus Arena", "location": "Columbus", "city": "columbus", "state": "OH", "zone": "midwest" },
+    { "id": "STORE015", "name": "Charlotte Uptown", "location": "Charlotte", "city": "charlotte", "state": "NC", "zone": "southeast" },
+    { "id": "STORE016", "name": "San Francisco Market", "location": "San Francisco", "city": "sf", "state": "CA", "zone": "west" },
+    { "id": "STORE017", "name": "Indianapolis Circle Center", "location": "Indianapolis", "city": "indianapolis", "state": "IN", "zone": "midwest" },
+    { "id": "STORE018", "name": "Seattle Pike Place", "location": "Seattle", "city": "seattle", "state": "WA", "zone": "west" },
+    { "id": "STORE019", "name": "Denver Tech Center", "location": "Denver", "city": "denver", "state": "CO", "zone": "west" },
+    { "id": "STORE020", "name": "DC National Mall", "location": "Washington D.C.", "city": "dc", "state": "DC", "zone": "northeast" },
+    { "id": "STORE021", "name": "Boston Common Store", "location": "Boston", "city": "boston", "state": "MA", "zone": "northeast" },
+    { "id": "STORE022", "name": "El Paso Sun Plaza", "location": "El Paso", "city": "elpaso", "state": "TX", "zone": "southwest" },
+    { "id": "STORE023", "name": "Nashville Music Row", "location": "Nashville", "city": "nashville", "state": "TN", "zone": "southeast" },
+    { "id": "STORE024", "name": "Detroit Motor City", "location": "Detroit", "city": "detroit", "state": "MI", "zone": "midwest" },
+    { "id": "STORE025", "name": "Oklahoma City Bricktown", "location": "Oklahoma City", "city": "okc", "state": "OK", "zone": "southwest" },
+    { "id": "STORE026", "name": "Portland Pearl District", "location": "Portland", "city": "portland", "state": "OR", "zone": "west" },
+    { "id": "STORE027", "name": "Las Vegas Strip", "location": "Las Vegas", "city": "vegas", "state": "NV", "zone": "west" },
+    { "id": "STORE028", "name": "Memphis Blues", "location": "Memphis", "city": "memphis", "state": "TN", "zone": "southeast" },
+    { "id": "STORE029", "name": "Louisville Slugger", "location": "Louisville", "city": "louisville", "state": "KY", "zone": "southeast" },
+    { "id": "STORE030", "name": "Baltimore Harbor", "location": "Baltimore", "city": "baltimore", "state": "MD", "zone": "northeast" },
+    { "id": "STORE031", "name": "Milwaukee Riverwalk", "location": "Milwaukee", "city": "milwaukee", "state": "WI", "zone": "midwest" },
+    { "id": "STORE032", "name": "Albuquerque Old Town", "location": "Albuquerque", "city": "albuquerque", "state": "NM", "zone": "southwest" },
+    { "id": "STORE033", "name": "Tucson Desert Plaza", "location": "Tucson", "city": "tucson", "state": "AZ", "zone": "southwest" },
+    { "id": "STORE034", "name": "Fresno Central", "location": "Fresno", "city": "fresno", "state": "CA", "zone": "west" },
+    { "id": "STORE035", "name": "Mesa Grand", "location": "Mesa", "city": "mesa", "state": "AZ", "zone": "southwest" },
+    { "id": "STORE036", "name": "Sacramento Capitol", "location": "Sacramento", "city": "sacramento", "state": "CA", "zone": "west" },
+    { "id": "STORE037", "name": "Atlanta Midtown", "location": "Atlanta", "city": "atlanta", "state": "GA", "zone": "southeast" },
+    { "id": "STORE038", "name": "Kansas City Plaza", "location": "Kansas City", "city": "kc", "state": "MO", "zone": "midwest" },
+    { "id": "STORE039", "name": "Colorado Springs Center", "location": "Colorado Springs", "city": "cos", "state": "CO", "zone": "west" },
+    { "id": "STORE040", "name": "Miami Beach Store", "location": "Miami", "city": "miami", "state": "FL", "zone": "southeast" }
   ]
 }

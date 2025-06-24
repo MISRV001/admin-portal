@@ -181,6 +181,7 @@ export const LoginForm: React.FC = () => {
                 <option value="admin">Admin (Full Access)</option>
                 <option value="campaign_manager">Campaign Manager</option>
                 <option value="reports_only">Reports Analyst</option>
+                <option value="pos_admin">POS-Admin</option>
               </select>
             </div>
 

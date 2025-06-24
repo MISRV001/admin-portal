@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Menu, Target, Store, User, BarChart3 } from 'lucide-react';
@@ -6,10 +6,13 @@ import { useAuthStore } from '../stores/authStore';
 import { useNavigationStore } from '../stores/navigationStore';
 import { Sidebar } from './Sidebar';
 import { CreateCampaign } from './CreateCampaign';
-import { Report1 } from './Report1';
+import { CampaignReport } from './CampaignReport';
 import { AddUsers } from './AddUsers';
 import { AddPlacements } from './AddPlacements';
+import { FeaturePermissions} from './FeaturePermissions';
 import { canAccessRoute } from '../lib/permissionUtils';
+import { PublishCampaign } from './PublishCampaign';
+import { ConditionsListPage } from './ConditionsListPage';
 
 // Helper function to get page title from route
 const getPageTitle = (route: string) => {
@@ -19,6 +22,8 @@ const getPageTitle = (route: string) => {
     '/emailinvites': 'Email Invites',
     '/rolestofeaturemapping': 'Roles to Feature Mapping',
     '/addusers': 'Add Users',
+    '/rolepermissions': 'Role Permissions',
+    '/featurepermissions': 'Feature Permissions',
     '/addplacements': 'Add Placements',
     '/campaignconditions': 'Campaign Conditions',
     '/createcampaign': 'Create Campaign',
@@ -26,7 +31,7 @@ const getPageTitle = (route: string) => {
     '/previewcampaign': 'Preview Campaign',
     '/posstoresdevice': 'POS Stores/Device',
     '/devicehealth': 'Device Health',
-    '/report1': 'Campaign Performance Report',
+    '/campaignreport': 'Campaign Performance Report',
     '/report2': 'Store Performance Report',
     '/report3': 'Inventory Report',
   };
@@ -132,9 +137,9 @@ const getRouteContent = (routePath: string, pageName: string, userRole?: string)
     return <CreateCampaign />;
   }
   
-  if (cleanPath === '/report1') {
-    console.log('✅ Matched: Report1');
-    return <Report1 />;
+  if (cleanPath === '/campaignreport') {
+    console.log('✅ Matched: CampaignReport');
+    return <CampaignReport />;
   }
   
   if (cleanPath === '/addusers') {
@@ -147,6 +152,23 @@ const getRouteContent = (routePath: string, pageName: string, userRole?: string)
     return <AddPlacements />;
   }
   
+  if (cleanPath === '/featurepermissions') {
+    console.log('✅ Matched: FeaturePermissions');
+    return <FeaturePermissions />;
+  }
+  
+  if (cleanPath === '/publishcampaign') { 
+    console.log('✅ Matched: PublishCampaign');
+    return <PublishCampaign />;
+  }
+  if (cleanPath === '/previewcampaign') {
+    console.log('✅ Matched: PreviewCampaign');
+    return <PublishCampaign previewMode={true} />;
+  }
+  // Add custom route for campaignconditions
+  if (cleanPath === '/campaignconditions') {
+    return <ConditionsListPage />;
+  }
   console.log('⚠️ No match found, using DefaultContent');
   return <DefaultContent pageName={pageName} userRole={userRole} />;
 };
@@ -210,14 +232,28 @@ export const MainContent: React.FC = () => {
   );
 };
 
-// Dashboard Layout Component
-export function DashboardLayout() {
+function getSidebarPermissionsForRole(role: string, sidebarPermissions: any) {
+  const roleObj = sidebarPermissions.roles.find((r: any) => r.name === role);
+  return roleObj ? roleObj.permissions : {};
+}
+
+export function DashboardLayout({ sidebarPermissions }: { sidebarPermissions: any }) {
   const { user } = useAuthStore();
   const router = useRouter();
   const routePath = router.asPath.split('?')[0].toLowerCase();
+  const userRole = user?.role || 'admin';
+  const permissions = useMemo(() => getSidebarPermissionsForRole(userRole, sidebarPermissions), [userRole, sidebarPermissions]);
+  const sidebarRoutes = sidebarPermissions.sidebar || [];
 
-  // Default: allow access if route is not mapped (fallback to '/')
-  const isAllowed = !user || canAccessRoute(user, routePath) || routePath === '/';
+  // Check if user can access this route
+  const isAllowed = permissions[routePath] && permissions[routePath] !== 'none';
+
+  useEffect(() => {
+    if (!isAllowed && user) {
+      // Optionally, you can push to default route automatically
+      // router.replace('/');
+    }
+  }, [isAllowed, user]);
 
   if (user && !isAllowed) {
     return (
@@ -234,11 +270,9 @@ export function DashboardLayout() {
     );
   }
 
-  console.log('=== DASHBOARD LAYOUT RENDER ===');
-  
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
-      <Sidebar />
+      <Sidebar permissions={permissions} sidebarRoutes={sidebarRoutes} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <MobileHeader />
         <MainContent />

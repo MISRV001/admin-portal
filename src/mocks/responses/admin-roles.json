@@ -1,0 +1,33 @@
+{
+  "roles": [
+    {
+      "name": "admin",
+      "permissions": {
+        "admin.users.manage": "edit",
+        "admin.roles.manage": "edit",
+        "admin.placements.manage": "edit",
+        "campaigns.create": "edit",
+        "campaigns.publish": "edit",
+        "campaigns.preview": "view",
+        "stores.manage": "edit",
+        "stores.health": "view",
+        "reports.view_all": "view"
+      }
+    },
+    {
+      "name": "campaign_manager",
+      "permissions": {
+        "campaigns.create": "edit",
+        "campaigns.publish": "edit",
+        "campaigns.preview": "view",
+        "reports.view_all": "view"
+      }
+    },
+    {
+      "name": "reports_only",
+      "permissions": {
+        "reports.view_all": "view"
+      }
+    }
+  ]
+}

@@ -49,6 +49,29 @@ export const useAuthStore = create<AuthStore>()(
           const mockAPI = MockAPIService.getInstance();
           const response = await mockAPI.makeRequest('auth/login', credentials, { method: 'POST' });
           const user = response.data?.user || response.user;
+          console.log('[AUTH DEBUG] Raw user from API:', user);
+
+          // DEBUG: Log permissions as received
+          if (user && user.permissions) {
+            console.log('[AUTH DEBUG] User permissions (raw):', user.permissions);
+            if (Array.isArray(user.permissions)) {
+              // Try to map to sidebar-permissions.json format
+              fetch('/mock/responses/sidebar-permissions.json')
+                .then(res => res.json())
+                .then(data => {
+                  const sidebarRoutes = data.sidebar.map((item: any) => item.route);
+                  const mapped: Record<string, string> = {};
+                  sidebarRoutes.forEach((route: string) => {
+                    // Try to find a matching permission for this route
+                    // For demo, default to 'view' if present in array, else 'none'
+                    mapped[route] = user.permissions.includes(route.replace('/', '')) || user.permissions.includes(route) ? 'view' : 'none';
+                  });
+                  console.log('[AUTH DEBUG] Mapped sidebar permissions:', mapped);
+                });
+            } else if (typeof user.permissions === 'object') {
+              console.log('[AUTH DEBUG] User permissions (object):', user.permissions);
+            }
+          }
 
           set({
             user,

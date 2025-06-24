@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Alert, AlertDescription } from './ui/alert';
 import { Edit, Trash2, Plus, Monitor, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { MockAPIService } from '../services/mockApiService';
+import { Button } from './ui/button';
 
 interface Placement {
   id: string;
@@ -196,200 +197,187 @@ export const AddPlacements: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="text-center py-8">
-        <div className="text-6xl mb-4">📱</div>
-        <h2 className="text-2xl font-bold text-gray-700 mb-2">Add/View Placements</h2>
-        <p className="text-gray-500">Create and manage placement configurations for your campaigns.</p>
-      </div>
-
-      {/* Current Placements */}
-      <Card>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 p-8">
+      <Card className="w-full max-w-6xl mx-auto rounded-xl shadow-lg bg-white">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Monitor className="w-5 h-5" />
-            <span>Current Placements</span>
-          </CardTitle>
+          <CardTitle className="text-blue-700">Add Placements</CardTitle>
         </CardHeader>
         <CardContent>
-          {error && (
-            <Alert className="border-red-200 bg-red-50 mb-4">
-              <AlertDescription className="text-red-700">{error}</AlertDescription>
-            </Alert>
-          )}
-          
-          {placements.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <Monitor className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p>No placements found. Create your first placement below.</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {placements.map((placement) => (
-                <div key={placement.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3">
-                      <h3 className="font-medium text-gray-900">{placement.name}</h3>
-                      <span className={`px-2 py-1 text-xs rounded-full ${
-                        placement.isActive 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {placement.isActive ? 'Active' : 'Inactive'}
-                      </span>
-                    </div>
-                    <div className="mt-1 text-sm text-gray-500">
-                      Type: {placement.displayType.replace('_', '/')} • {placement.resolution} • {placement.orientation}
-                    </div>
-                    <div className="mt-1 text-xs text-gray-400">
-                      Location: {placement.location} • Formats: {placement.supportedFormats.join(', ')}
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => handleEdit(placement)}
-                      className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 border border-blue-300 rounded hover:bg-blue-50"
-                    >
-                      <Edit className="w-4 h-4 inline mr-1" />
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(placement.id)}
-                      className="px-3 py-1 text-sm text-red-600 hover:text-red-800 border border-red-300 rounded hover:bg-red-50"
-                    >
-                      <Trash2 className="w-4 h-4 inline mr-1" />
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Add New Placement Form */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Plus className="w-5 h-5" />
-            <span>{editingId ? 'Edit Placement' : 'Add New Placement'}</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {renderStatus()}
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Placement Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g., POS_Small_Screen"
-                required
-                disabled={isSubmitting}
-              />
+          <div className="space-y-6">
+            <div className="text-center py-8">
+              <div className="text-6xl mb-4">📱</div>
+              <h2 className="text-2xl font-bold text-gray-700 mb-2">Add/View Placements</h2>
+              <p className="text-gray-500">Create and manage placement configurations for your campaigns.</p>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Display Type
-              </label>
-              <select
-                name="displayType"
-                value={formData.displayType}
-                onChange={handleInputChange}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-                disabled={isSubmitting}
-              >
-                <option value="">Select Type</option>
-                {displayTypes.map((type) => (
-                  <option key={type.value} value={type.value}>
-                    {type.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Orientation
-              </label>
-              <select
-                name="orientation"
-                value={formData.orientation}
-                onChange={handleInputChange}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-                disabled={isSubmitting}
-              >
-                <option value="">Select Orientation</option>
-                {orientations.map((orientation) => (
-                  <option key={orientation.value} value={orientation.value}>
-                    {orientation.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Resolution
-              </label>
-              <select
-                name="resolution"
-                value={formData.resolution}
-                onChange={handleInputChange}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-                disabled={isSubmitting}
-              >
-                <option value="">Select Resolution</option>
-                {resolutions.map((resolution) => (
-                  <option key={resolution.value} value={resolution.value}>
-                    {resolution.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex space-x-3">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <div className="flex items-center justify-center space-x-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>{editingId ? 'Updating...' : 'Adding...'}</span>
+            {/* Current Placements */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Monitor className="w-5 h-5" />
+                  <span>Current Placements</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {error && (
+                  <Alert className="border-red-200 bg-red-50 mb-4">
+                    <AlertDescription className="text-red-700">{error}</AlertDescription>
+                  </Alert>
+                )}
+                
+                {placements.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <Monitor className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                    <p>No placements found. Create your first placement below.</p>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center space-x-2">
-                    <Plus className="w-4 h-4" />
-                    <span>{editingId ? 'Update Placement' : 'Add Placement'}</span>
+                  <div className="space-y-4">
+                    {placements.map((placement) => (
+                      <div key={placement.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-3">
+                            <h3 className="font-medium text-gray-900">{placement.name}</h3>
+                            <span className={`px-2 py-1 text-xs rounded-full ${
+                              placement.isActive 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {placement.isActive ? 'Active' : 'Inactive'}
+                            </span>
+                          </div>
+                          <div className="mt-1 text-sm text-gray-500">
+                            Type: {placement.displayType.replace('_', '/')} • {placement.resolution} • {placement.orientation}
+                          </div>
+                          <div className="mt-1 text-xs text-gray-400">
+                            Location: {placement.location} • Formats: {placement.supportedFormats.join(', ')}
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => handleEdit(placement)}
+                            className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 border border-blue-300 rounded hover:bg-blue-50"
+                          >
+                            <Edit className="w-4 h-4 inline mr-1" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(placement.id)}
+                            className="px-3 py-1 text-sm text-red-600 hover:text-red-800 border border-red-300 rounded hover:bg-red-50"
+                          >
+                            <Trash2 className="w-4 h-4 inline mr-1" />
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
-              </button>
-              
-              {editingId && (
-                <button
-                  type="button"
-                  onClick={resetForm}
-                  disabled={isSubmitting}
-                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-              )}
-            </div>
-          </form>
+              </CardContent>
+            </Card>
+
+            {/* Add New Placement Form */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Plus className="w-5 h-5" />
+                  <span>{editingId ? 'Edit Placement' : 'Add New Placement'}</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {renderStatus()}
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Placement Name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="e.g., POS_Small_Screen"
+                      required
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Display Type
+                    </label>
+                    <select
+                      name="displayType"
+                      value={formData.displayType}
+                      onChange={handleInputChange}
+                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                      disabled={isSubmitting}
+                    >
+                      <option value="">Select Type</option>
+                      {displayTypes.map((type) => (
+                        <option key={type.value} value={type.value}>
+                          {type.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Orientation
+                    </label>
+                    <select
+                      name="orientation"
+                      value={formData.orientation}
+                      onChange={handleInputChange}
+                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                      disabled={isSubmitting}
+                    >
+                      <option value="">Select Orientation</option>
+                      {orientations.map((orientation) => (
+                        <option key={orientation.value} value={orientation.value}>
+                          {orientation.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Resolution
+                    </label>
+                    <select
+                      name="resolution"
+                      value={formData.resolution}
+                      onChange={handleInputChange}
+                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                      disabled={isSubmitting}
+                    >
+                      <option value="">Select Resolution</option>
+                      {resolutions.map((resolution) => (
+                        <option key={resolution.value} value={resolution.value}>
+                          {resolution.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="flex justify-end w-full mt-4">
+                    <button
+                      type="submit"
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg shadow hover:scale-105 transition-transform font-semibold text-lg"
+                    >
+                      Add Placement
+                    </button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
         </CardContent>
       </Card>
     </div>
