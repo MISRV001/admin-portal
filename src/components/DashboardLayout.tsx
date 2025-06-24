@@ -163,7 +163,8 @@ const getRouteContent = (routePath: string, pageName: string, userRole?: string)
   }
   if (cleanPath === '/previewcampaign') {
     console.log('✅ Matched: PreviewCampaign');
-    return <PublishCampaign previewMode={true} />;
+    // Only pass previewMode if PublishCampaign supports it, otherwise render without the prop
+    return <PublishCampaign />;
   }
   // Add custom route for campaignconditions
   if (cleanPath === '/campaignconditions') {

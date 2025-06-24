@@ -512,10 +512,18 @@ export const CreateCampaign: React.FC = () => {
                   </div>
                 </div>
               )}
-              <div className="mt-8 text-white text-center animate-fadein">
-                <div className="text-lg font-semibold">{templateOptions.find(opt => opt.value === campaignData.media.template)?.label}</div>
-                <div className="text-xs text-gray-300">Auto-play: {autoPlay ? 'On' : 'Off'} | Interval: {templateOptions.find(opt => opt.value === campaignData.media.template)?.duration ? `${templateOptions.find(opt => opt.value === campaignData.media.template)?.duration / 1000}s` : 'Static'}</div>
-              </div>
+              {/* Fix: Safely handle undefined template */}
+              {(() => {
+                const selectedTemplate = templateOptions.find(opt => opt.value === campaignData.media.template);
+                return (
+                  <div className="mt-8 text-white text-center animate-fadein">
+                    <div className="text-lg font-semibold">{selectedTemplate?.label || 'Template'}</div>
+                    <div className="text-xs text-gray-300">
+                      Auto-play: {autoPlay ? 'On' : 'Off'} | Interval: {selectedTemplate?.duration ? `${selectedTemplate.duration / 1000}s` : 'Static'}
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </div>
         </div>
