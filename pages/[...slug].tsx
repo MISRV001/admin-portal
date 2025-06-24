@@ -6,8 +6,20 @@ import { DashboardLayout } from '../src/components/DashboardLayout';
 import { LoginForm } from '../src/components/LoginForm';
 import { NetworkSimulator } from '../src/components/NetworkSimulator';
 import { EnhancedApiModeSelector } from '../src/components//ApiModeSelector';
+import fs from 'fs';
+import path from 'path';
 
-export default function HomePage() {
+export async function getServerSideProps() {
+  const sidebarPath = path.join(process.cwd(), 'public/mock/responses/sidebar-permissions.json');
+  console.log('[SSR] Fetching sidebar-permissions.json from:', sidebarPath);
+  const sidebarPermissionsRaw = fs.readFileSync(sidebarPath, 'utf-8');
+  console.log('[SSR] Raw sidebar-permissions.json:', sidebarPermissionsRaw);
+  const sidebarPermissions = JSON.parse(sidebarPermissionsRaw);
+  console.log('[SSR] Parsed sidebar-permissions.json:', sidebarPermissions);
+  return { props: { sidebarPermissions } };
+}
+
+export default function HomePage({ sidebarPermissions }: { sidebarPermissions: any }) {
   const { isAuthenticated } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -45,7 +57,7 @@ export default function HomePage() {
         <title>Dashboard - BoostTrade</title>
       </Head>
       <div className="min-h-screen bg-gray-50" style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}>
-        {isAuthenticated ? <DashboardLayout /> : <LoginForm />}
+        {isAuthenticated ? <DashboardLayout sidebarPermissions={sidebarPermissions} /> : <LoginForm />}
         <NetworkSimulator />
         <EnhancedApiModeSelector />
       </div>

@@ -13,11 +13,8 @@
     { "route": "/campaignreport", "name": "Campaign Report", "description": "View campaign performance report.", "group": "Reports" },
     { "route": "/report2", "name": "Store Performance Report", "description": "View store performance analytics.", "group": "Reports" },
     { "route": "/report3", "name": "Device Health Report", "description": "View device health analytics.", "group": "Reports" },
-    { "route": "/networksimulator", "name": "Network Simulator", "description": "Simulate and test network conditions.", "group": "Admin" },
-    { "route": "/apimodeselector", "name": "API Mode Selector", "description": "Switch API modes for testing.", "group": "Admin" },
     { "route": "/stores", "name": "Stores", "description": "Manage store locations and details.", "group": "Store Management" },
-    { "route": "/reports", "name": "Reports", "description": "Access all analytics and reports.", "group": "Reports" },
-    { "route": "/settings", "name": "Settings", "description": "Configure application settings.", "group": "Admin" }
+    { "route": "/reports", "name": "Reports", "description": "Access all analytics and reports.", "group": "Reports" }
   ],
   "roles": [
     {
@@ -36,11 +33,8 @@
         "/campaignreport": "view",
         "/report2": "view",
         "/report3": "view",
-        "/networksimulator": "edit",
-        "/apimodeselector": "edit",
         "/stores": "edit",
-        "/reports": "view",
-        "/settings": "edit"
+        "/reports": "view"
       }
     },
     {
@@ -59,11 +53,8 @@
         "/campaignreport": "view",
         "/report2": "view",
         "/report3": "view",
-        "/networksimulator": "none",
-        "/apimodeselector": "none",
         "/stores": "none",
-        "/reports": "view",
-        "/settings": "none"
+        "/reports": "view"
       }
     },
     {
@@ -82,11 +73,8 @@
         "/campaignreport": "view",
         "/report2": "view",
         "/report3": "view",
-        "/networksimulator": "none",
-        "/apimodeselector": "none",
         "/stores": "none",
-        "/reports": "view",
-        "/settings": "none"
+        "/reports": "view"
       }
     },
     {
@@ -105,11 +93,8 @@
         "/campaignreport": "view",
         "/report2": "view",
         "/report3": "view",
-        "/networksimulator": "none",
-        "/apimodeselector": "none",
         "/stores": "edit",
-        "/reports": "view",
-        "/settings": "none"
+        "/reports": "view"
       }
     }
   ]

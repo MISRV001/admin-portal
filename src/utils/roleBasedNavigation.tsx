@@ -39,41 +39,31 @@ export interface NavigationItem {
 }
 
 // Dynamic hook for navigation items
-export function useNavigationItems(userRole: UserRole, permissions: Record<string, string>) {
+export function useNavigationItems(userRole: UserRole, permissions: Record<string, string>, sidebarRoutes?: SidebarRoute[]) {
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
 
   useEffect(() => {
-    let cancelled = false;
-    async function loadSidebar() {
-      console.log('[NAV DEBUG] useNavigationItems called with:', { userRole, permissions });
-      const res = await fetch('/mock/responses/sidebar-permissions.json');
-      const data = await res.json();
-      if (cancelled) return;
-      const sidebar: SidebarRoute[] = data.sidebar;
-      // Group by 'group' field
-      const grouped: Record<string, SidebarRoute[]> = {};
-      sidebar.forEach(item => {
-        if (!grouped[item.group]) grouped[item.group] = [];
-        grouped[item.group].push(item);
-      });
-      // Build navigation items
-      const nav = Object.entries(grouped).map(([group, items]) => ({
-        title: group,
-        icon: routeIconMap[items[0].route] || <Shield className="w-4 h-4" />,
-        children: items
-          .filter(item => permissions[item.route] && permissions[item.route] !== 'none')
-          .map(item => ({
-            name: item.name,
-            icon: routeIconMap[item.route] || <Shield className="w-4 h-4" />,
-            route: item.route
-          }))
-      })).filter(item => item.children.length > 0);
-      console.log('[NAV DEBUG] navigationItems generated:', nav);
-      setNavigationItems(nav);
-    }
-    loadSidebar();
-    return () => { cancelled = true; };
-  }, [userRole, permissions]);
+    if (!sidebarRoutes) return;
+    // Group by 'group' field
+    const grouped: Record<string, SidebarRoute[]> = {};
+    sidebarRoutes.forEach(item => {
+      if (!grouped[item.group]) grouped[item.group] = [];
+      grouped[item.group].push(item);
+    });
+    // Build navigation items
+    const nav = Object.entries(grouped).map(([group, items]) => ({
+      title: group,
+      icon: routeIconMap[items[0].route] || <Shield className="w-4 h-4" />,
+      children: items
+        .filter(item => permissions[item.route] && permissions[item.route] !== 'none')
+        .map(item => ({
+          name: item.name,
+          icon: routeIconMap[item.route] || <Shield className="w-4 h-4" />,
+          route: item.route
+        }))
+    })).filter(item => item.children.length > 0);
+    setNavigationItems(nav);
+  }, [userRole, permissions, sidebarRoutes]);
 
   return navigationItems;
 }

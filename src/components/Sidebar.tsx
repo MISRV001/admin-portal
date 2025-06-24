@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { ChevronDown, ChevronRight, Menu, X, User, LogOut } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
@@ -29,7 +29,7 @@ const CollapsibleMenuItem: React.FC<CollapsibleMenuItemProps> = ({
   const [isOpen, setIsOpen] = useState(isAnyChildActive);
 
   // Keep open when route changes and a child is active
-  useEffect(() => {
+  React.useEffect(() => {
     if (isAnyChildActive) setIsOpen(true);
   }, [router.asPath]);
 
@@ -83,36 +83,16 @@ const CollapsibleMenuItem: React.FC<CollapsibleMenuItemProps> = ({
   );
 };
 
-export const Sidebar: React.FC = () => {
+export const Sidebar: React.FC<{ permissions?: Record<string, string>, sidebarRoutes?: any[] }> = ({ permissions: serverPermissions, sidebarRoutes }) => {
   const { sidebarCollapsed, mobileMenuOpen, toggleSidebar, closeMobileMenu } = useNavigationStore();
   const { user, logout } = useAuthStore();
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [sidebarPermissions, setSidebarPermissions] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    async function fetchSidebarPermissions() {
-      if (!user) return;
-      try {
-        const res = await fetch('/mock/responses/sidebar-permissions.json');
-        const data = await res.json();
-        const role = data.roles.find((r: any) => r.name === user.role);
-        if (role && role.permissions) {
-          setSidebarPermissions(role.permissions);
-          console.log('[SIDEBAR DEBUG] Loaded sidebar-permissions.json permissions for role', user.role, role.permissions);
-        } else {
-          setSidebarPermissions({});
-          console.log('[SIDEBAR DEBUG] No permissions found for role', user.role);
-        }
-      } catch (e) {
-        setSidebarPermissions({});
-        console.error('[SIDEBAR DEBUG] Failed to load sidebar-permissions.json', e);
-      }
-    }
-    fetchSidebarPermissions();
-  }, [user]);
+  // Use permissions from server (SSR/SSG) or fallback to empty object
+  const sidebarPermissions = serverPermissions || {};
 
   // Use navigationItems hook, but wait for user to be defined
-  const navigationItems = useNavigationItems(user?.role || 'admin', sidebarPermissions);
+  const navigationItems = useNavigationItems(user?.role || 'admin', sidebarPermissions, sidebarRoutes);
   console.log('[SIDEBAR DEBUG] navigationItems:', navigationItems);
 
   const DesktopSidebar = () => (

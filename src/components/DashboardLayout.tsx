@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Menu, Target, Store, User, BarChart3 } from 'lucide-react';
@@ -227,14 +227,28 @@ export const MainContent: React.FC = () => {
   );
 };
 
-// Dashboard Layout Component
-export function DashboardLayout() {
+function getSidebarPermissionsForRole(role: string, sidebarPermissions: any) {
+  const roleObj = sidebarPermissions.roles.find((r: any) => r.name === role);
+  return roleObj ? roleObj.permissions : {};
+}
+
+export function DashboardLayout({ sidebarPermissions }: { sidebarPermissions: any }) {
   const { user } = useAuthStore();
   const router = useRouter();
   const routePath = router.asPath.split('?')[0].toLowerCase();
+  const userRole = user?.role || 'admin';
+  const permissions = useMemo(() => getSidebarPermissionsForRole(userRole, sidebarPermissions), [userRole, sidebarPermissions]);
+  const sidebarRoutes = sidebarPermissions.sidebar || [];
 
-  // Default: allow access if route is not mapped (fallback to '/')
-  const isAllowed = !user || canAccessRoute(user, routePath) || routePath === '/';
+  // Check if user can access this route
+  const isAllowed = permissions[routePath] && permissions[routePath] !== 'none';
+
+  useEffect(() => {
+    if (!isAllowed && user) {
+      // Optionally, you can push to default route automatically
+      // router.replace('/');
+    }
+  }, [isAllowed, user]);
 
   if (user && !isAllowed) {
     return (
@@ -251,11 +265,9 @@ export function DashboardLayout() {
     );
   }
 
-  console.log('=== DASHBOARD LAYOUT RENDER ===');
-  
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
-      <Sidebar />
+      <Sidebar permissions={permissions} sidebarRoutes={sidebarRoutes} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <MobileHeader />
         <MainContent />
