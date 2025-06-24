@@ -330,21 +330,21 @@ export const CreateCampaign: React.FC = () => {
 
   // --- UI Rendering ---
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 p-0 md:p-8 animate-fadein">
-      <div className="pt-32 flex flex-col items-center w-full animate-fadein">
-        <div className="w-full max-w-5xl space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 p-8">
+      <div className="flex flex-col items-center w-full">
+        <div className="w-full max-w-6xl space-y-6">
           {/* Main sections use full width */}
-          <Card className="rounded-2xl shadow-xl bg-white/90 animate-fadein w-full">
+          <Card className="rounded-xl shadow-lg bg-white w-full">
             <CardHeader>
               <CardTitle className="text-blue-700">Campaign Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <input type="text" name="name" value={campaignData.name} onChange={handleInputChange} placeholder="Campaign Name" className="w-full p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all" />
-              <textarea name="description" value={campaignData.description} onChange={handleInputChange} placeholder="Description" className="w-full p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all" />
-              <input type="number" name="budget" value={campaignData.budget} onChange={handleInputChange} placeholder="Budget" className="w-full p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all" />
+              <input type="text" name="name" value={campaignData.name} onChange={handleInputChange} placeholder="Campaign Name" className="w-full p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400" />
+              <textarea name="description" value={campaignData.description} onChange={handleInputChange} placeholder="Description" className="w-full p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400" />
+              <input type="number" name="budget" value={campaignData.budget} onChange={handleInputChange} placeholder="Budget" className="w-full p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400" />
             </CardContent>
           </Card>
-          <Card className="rounded-2xl shadow-xl bg-white/90 animate-fadein w-full">
+          <Card className="rounded-xl shadow-lg bg-white w-full">
             <CardHeader>
               <CardTitle className="text-blue-700">Campaign Conditions</CardTitle>
             </CardHeader>
@@ -355,30 +355,30 @@ export const CreateCampaign: React.FC = () => {
                 ))}
               </div>
               <div className="flex gap-4">
-                <select className="flex-1 p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all" value={campaignData.conditions.traffic} onChange={e => handleConditionChange('traffic', e.target.value)}>
+                <select className="flex-1 p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400" value={campaignData.conditions.traffic} onChange={e => handleConditionChange('traffic', e.target.value)}>
                   <option value="">Traffic Level</option>
                   {trafficOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </select>
-                <select className="flex-1 p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all" value={campaignData.conditions.footfall} onChange={e => handleConditionChange('footfall', e.target.value)}>
+                <select className="flex-1 p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400" value={campaignData.conditions.footfall} onChange={e => handleConditionChange('footfall', e.target.value)}>
                   <option value="">Footfall Level</option>
                   {footfallOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </select>
               </div>
             </CardContent>
           </Card>
-          <Card className="rounded-2xl shadow-xl bg-white/90 animate-fadein w-full">
+          <Card className="rounded-xl shadow-lg bg-white w-full">
             <CardHeader>
               <CardTitle className="text-blue-700">Schedule</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
-              <input type="date" name="startDate" value={campaignData.schedule.startDate} onChange={e => setCampaignData(prev => ({ ...prev, schedule: { ...prev.schedule, startDate: e.target.value } }))} className="p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all" />
-              <input type="time" name="startTime" value={campaignData.schedule.startTime} onChange={e => setCampaignData(prev => ({ ...prev, schedule: { ...prev.schedule, startTime: e.target.value } }))} className="p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all" />
-              <input type="date" name="endDate" value={campaignData.schedule.endDate} onChange={e => setCampaignData(prev => ({ ...prev, schedule: { ...prev.schedule, endDate: e.target.value } }))} className="p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all" />
-              <input type="time" name="endTime" value={campaignData.schedule.endTime} onChange={e => setCampaignData(prev => ({ ...prev, schedule: { ...prev.schedule, endTime: e.target.value } }))} className="p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all" />
+              <input type="date" name="startDate" value={campaignData.schedule.startDate} onChange={e => setCampaignData(prev => ({ ...prev, schedule: { ...prev.schedule, startDate: e.target.value } }))} className="p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400" />
+              <input type="time" name="startTime" value={campaignData.schedule.startTime} onChange={e => setCampaignData(prev => ({ ...prev, schedule: { ...prev.schedule, startTime: e.target.value } }))} className="p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400" />
+              <input type="date" name="endDate" value={campaignData.schedule.endDate} onChange={e => setCampaignData(prev => ({ ...prev, schedule: { ...prev.schedule, endDate: e.target.value } }))} className="p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400" />
+              <input type="time" name="endTime" value={campaignData.schedule.endTime} onChange={e => setCampaignData(prev => ({ ...prev, schedule: { ...prev.schedule, endTime: e.target.value } }))} className="p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400" />
             </CardContent>
           </Card>
           <div className="space-y-8">
-            <Card className="rounded-2xl shadow-xl bg-white/90 animate-fadein w-full">
+            <Card className="rounded-xl shadow-lg bg-white w-full">
               <CardHeader>
                 <CardTitle className="text-blue-700">Targeting</CardTitle>
               </CardHeader>
@@ -386,38 +386,38 @@ export const CreateCampaign: React.FC = () => {
                 <div className="flex flex-col md:flex-row gap-4">
                   <div className="flex-1">
                     <label className="block text-sm font-medium text-blue-700 mb-1">Geo Zone</label>
-                    <select multiple className="w-full p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all h-32" value={selectedZones} onChange={e => setSelectedZones(Array.from(e.target.selectedOptions).map(o => o.value))}>
+                    <select multiple className="w-full p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400 h-32" value={selectedZones} onChange={e => setSelectedZones(Array.from(e.target.selectedOptions).map(o => o.value))}>
                       {regionOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                     </select>
                   </div>
                   <div className="flex-1">
                     <label className="block text-sm font-medium text-blue-700 mb-1">State</label>
-                    <select multiple className="w-full p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all h-32" value={selectedStates} onChange={e => setSelectedStates(Array.from(e.target.selectedOptions).map(o => o.value))}>
+                    <select multiple className="w-full p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400 h-32" value={selectedStates} onChange={e => setSelectedStates(Array.from(e.target.selectedOptions).map(o => o.value))}>
                       {filteredStates.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                     </select>
                   </div>
                   <div className="flex-1">
                     <label className="block text-sm font-medium text-blue-700 mb-1">City</label>
-                    <select multiple className="w-full p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all h-32" value={selectedCities} onChange={e => setSelectedCities(Array.from(e.target.selectedOptions).map(o => o.value))}>
+                    <select multiple className="w-full p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400 h-32" value={selectedCities} onChange={e => setSelectedCities(Array.from(e.target.selectedOptions).map(o => o.value))}>
                       {filteredCities.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                     </select>
                   </div>
                   <div className="flex-1">
                     <label className="block text-sm font-medium text-blue-700 mb-1">Store</label>
-                    <select multiple className="w-full p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all h-32" value={selectedStores} onChange={e => setSelectedStores(Array.from(e.target.selectedOptions).map(o => o.value))}>
+                    <select multiple className="w-full p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400 h-32" value={selectedStores} onChange={e => setSelectedStores(Array.from(e.target.selectedOptions).map(o => o.value))}>
                       {filteredStores.map(option => <option key={option.id} value={option.id}>{option.name} ({option.location})</option>)}
                     </select>
                   </div>
                   <div className="flex-1">
                     <label className="block text-sm font-medium text-blue-700 mb-1">Placement</label>
-                    <select multiple className="w-full p-3 rounded-lg border border-blue-200 focus:ring-2 focus:ring-blue-400 transition-all h-32" value={selectedPlacements} onChange={e => setSelectedPlacements(Array.from(e.target.selectedOptions).map(o => o.value))}>
+                    <select multiple className="w-full p-2 rounded border border-blue-200 focus:ring-2 focus:ring-blue-400 h-32" value={selectedPlacements} onChange={e => setSelectedPlacements(Array.from(e.target.selectedOptions).map(o => o.value))}>
                       {filteredPlacements.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
                     </select>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="rounded-2xl shadow-xl bg-white/90 animate-fadein w-full">
+            <Card className="rounded-xl shadow-lg bg-white w-full">
               <CardHeader>
                 <CardTitle className="text-blue-700">Media Upload</CardTitle>
               </CardHeader>
@@ -439,7 +439,7 @@ export const CreateCampaign: React.FC = () => {
                 <div className="mt-2 text-sm text-gray-500">{campaignData.media.images.length} image(s) selected</div>
               </CardContent>
             </Card>
-            <Card className="rounded-2xl shadow-xl bg-white/90 animate-fadein w-full">
+            <Card className="rounded-xl shadow-lg bg-white w-full">
               <CardHeader>
                 <CardTitle className="text-blue-700">Template Selection</CardTitle>
               </CardHeader>
@@ -457,7 +457,7 @@ export const CreateCampaign: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="rounded-2xl shadow-xl bg-white/90 animate-fadein w-full">
+            <Card className="rounded-xl shadow-lg bg-white w-full">
               <CardHeader>
                 <CardTitle className="text-blue-700">Campaign Summary</CardTitle>
               </CardHeader>

@@ -117,9 +117,9 @@ export const PublishCampaign: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 p-8">
-      <Card className="w-full max-w-6xl mx-auto">
+      <Card className="w-full max-w-6xl mx-auto rounded-xl shadow-lg bg-white">
         <CardHeader>
-          <CardTitle>Campaigns</CardTitle>
+          <CardTitle className="text-blue-700">Campaigns</CardTitle>
         </CardHeader>
         <CardContent>
           {/* Filter by State and City */}
@@ -127,7 +127,6 @@ export const PublishCampaign: React.FC = () => {
             <select value={selectedState} onChange={e => { setSelectedState(e.target.value); setPage(1); }} className="p-2 border rounded min-w-[180px]">
               <option value="">All States</option>
               {Array.from(new Set(cities.map((c: any) => c.state))).map(stateCode => {
-                // Try to get state label from locations-list.json if available
                 const stateObj = (zones.flatMap((z: any) => (z.states || [])) as any[]).find((s: any) => s.value === stateCode);
                 return <option key={stateCode} value={stateCode}>{stateObj?.label || stateCode}</option>;
               })}
@@ -143,7 +142,7 @@ export const PublishCampaign: React.FC = () => {
             <table className="min-w-full whitespace-nowrap bg-white text-sm">
               <thead className="bg-gradient-to-r from-blue-100 to-purple-100">
                 <tr>
-                  {["name","description","status","startDate","endDate"].map((key) => (
+                  {['name','description','status','startDate','endDate'].map((key) => (
                     <th key={key} className="px-2 py-2 text-left font-semibold text-blue-700 cursor-pointer select-none" onClick={() => {
                       if (sortKey === key) setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
                       else { setSortKey(key); setSortDir('asc'); }

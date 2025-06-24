@@ -92,98 +92,100 @@ export const FeaturePermissions: React.FC = () => {
   };
 
   return (
-    <Card className="max-w-3xl mx-auto p-0">
-      <CardHeader>
-        <CardTitle>Feature Permissions</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-6 flex items-center gap-4">
-          <Label htmlFor="role">Role:</Label>
-          <Select value={selectedRole} onValueChange={setSelectedRole}>
-            <SelectTrigger className="w-56">
-              {ALL_ROLES.find(r => r.value === selectedRole)?.label ?? ''}
-            </SelectTrigger>
-            <SelectContent>
-              {ALL_ROLES.map(role => (
-                <SelectItem key={role.value} value={role.value}>{role.label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {selectedRole === 'new' && (
-            <Input
-              placeholder="New Role Name"
-              value={newRoleName}
-              onChange={e => setNewRoleName(e.target.value)}
-              className="ml-2 w-56"
-            />
-          )}
-        </div>
-        {loading ? (
-          <Skeleton className="h-32 w-full" />
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full border">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="text-left p-2">Feature</th>
-                  <th className="text-left p-2">Description</th>
-                  <th className="text-left p-2">Permission</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ALL_FEATURES.map(feature => (
-                  <tr key={feature.key} className="border-t">
-                    <td className="p-2">{feature.name}</td>
-                    <td className="p-2 text-gray-500">{feature.description}</td>
-                    <td className="p-2">
-                      <Select
-                          value={permissions[feature.key] || 'none'}
-                          onValueChange={value => handlePermissionChange(feature.key, value)}
-                        >
-                          <SelectTrigger className="w-36">
-                            {PERMISSION_LEVELS.find(l => l.value === (permissions[feature.key] || 'none'))?.label ?? 'No-Access'}
-                          </SelectTrigger>
-                          <SelectContent>
-                            {PERMISSION_LEVELS.map(level => (
-                              <SelectItem key={level.value} value={level.value}>{level.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                    </td>
-                  </tr>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 p-8">
+      <Card className="w-full max-w-6xl mx-auto rounded-xl shadow-lg bg-white">
+        <CardHeader>
+          <CardTitle className="text-blue-700">Feature Permissions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-6 flex items-center gap-4">
+            <Label htmlFor="role">Role:</Label>
+            <Select value={selectedRole} onValueChange={setSelectedRole}>
+              <SelectTrigger className="w-56">
+                {ALL_ROLES.find(r => r.value === selectedRole)?.label ?? ''}
+              </SelectTrigger>
+              <SelectContent>
+                {ALL_ROLES.map(role => (
+                  <SelectItem key={role.value} value={role.value}>{role.label}</SelectItem>
                 ))}
-              </tbody>
-            </table>
+              </SelectContent>
+            </Select>
+            {selectedRole === 'new' && (
+              <Input
+                placeholder="New Role Name"
+                value={newRoleName}
+                onChange={e => setNewRoleName(e.target.value)}
+                className="ml-2 w-56"
+              />
+            )}
           </div>
-        )}
-        {(success || error) && (
-          <Alert className={`mt-4 ${success ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
-            <AlertDescription className={success ? 'text-green-700' : 'text-red-700'}>
-              {success || error}
-            </AlertDescription>
-          </Alert>
-        )}
-        <div className="flex gap-4 mt-8">
-          <Button
-            onClick={handleSave}
-            disabled={saving || loading || (selectedRole === 'new' && !newRoleName)}
-            className="bg-blue-600 text-white"
-          >
-            {saving ? 'Saving...' : 'Save Permission Changes'}
-          </Button>
-          {selectedRole === 'new' && (
-            <Button
-              variant="outline"
-              onClick={() => {
-                setNewRoleName('');
-                setSelectedRole('admin');
-              }}
-            >
-              Cancel
-            </Button>
+          {loading ? (
+            <Skeleton className="h-32 w-full" />
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full border">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="text-left p-2">Feature</th>
+                    <th className="text-left p-2">Description</th>
+                    <th className="text-left p-2">Permission</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ALL_FEATURES.map(feature => (
+                    <tr key={feature.key} className="border-t">
+                      <td className="p-2">{feature.name}</td>
+                      <td className="p-2 text-gray-500">{feature.description}</td>
+                      <td className="p-2">
+                        <Select
+                            value={permissions[feature.key] || 'none'}
+                            onValueChange={value => handlePermissionChange(feature.key, value)}
+                          >
+                            <SelectTrigger className="w-36">
+                              {PERMISSION_LEVELS.find(l => l.value === (permissions[feature.key] || 'none'))?.label ?? 'No-Access'}
+                            </SelectTrigger>
+                            <SelectContent>
+                              {PERMISSION_LEVELS.map(level => (
+                                <SelectItem key={level.value} value={level.value}>{level.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
-        </div>
-      </CardContent>
-    </Card>
+          {(success || error) && (
+            <Alert className={`mt-4 ${success ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
+              <AlertDescription className={success ? 'text-green-700' : 'text-red-700'}>
+                {success || error}
+              </AlertDescription>
+            </Alert>
+          )}
+          <div className="flex gap-4 mt-8">
+            <Button
+              onClick={handleSave}
+              disabled={saving || loading || (selectedRole === 'new' && !newRoleName)}
+              className="bg-blue-600 text-white"
+            >
+              {saving ? 'Saving...' : 'Save Permission Changes'}
+            </Button>
+            {selectedRole === 'new' && (
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setNewRoleName('');
+                  setSelectedRole('admin');
+                }}
+              >
+                Cancel
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
