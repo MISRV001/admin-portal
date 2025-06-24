@@ -25,6 +25,9 @@ export const PublishCampaign: React.FC = () => {
   const [selectedState, setSelectedState] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [showEditInfo, setShowEditInfo] = useState<number|null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  // Add filter for Campaign Publish Status
+  const [statusFilter, setStatusFilter] = useState('');
 
   useEffect(() => {
     api.loadMockFile('locations-list.json').then((data) => setZones(data.regions));
@@ -37,6 +40,9 @@ export const PublishCampaign: React.FC = () => {
     setTimeout(() => {
       api.loadMockFile('campaigns-list.json').then((data) => {
         let filtered = data.campaigns;
+        if (statusFilter) {
+          filtered = filtered.filter((c: any) => getCampaignStatus(c) === statusFilter);
+        }
         if (selectedState) {
           filtered = filtered.filter((c: any) => c.state === selectedState);
         }
@@ -61,7 +67,7 @@ export const PublishCampaign: React.FC = () => {
         setLoading(false);
       });
     }, 800);
-  }, [filterType, filterValue, page, sortKey, sortDir, selectedState, selectedCity]);
+  }, [statusFilter, filterType, filterValue, page, sortKey, sortDir, selectedState, selectedCity]);
 
   const handlePublish = (id: number) => setConfirmAction({ type: 'publish', id });
   const handleDelete = (id: number) => setConfirmAction({ type: 'delete', id });
@@ -115,6 +121,11 @@ export const PublishCampaign: React.FC = () => {
     return getCampaignStatus(c) !== 'Published Running';
   };
 
+  const isNextDisabled = () => {
+    // Add your logic to enable/disable the Next button
+    return false;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 p-8">
       <Card className="w-full max-w-6xl mx-auto rounded-xl shadow-lg bg-white">
@@ -122,8 +133,16 @@ export const PublishCampaign: React.FC = () => {
           <CardTitle className="text-blue-700">Campaigns</CardTitle>
         </CardHeader>
         <CardContent>
-          {/* Filter by State and City */}
+          {/* Filter by Publish Status */}
           <div className="flex flex-wrap gap-4 mb-4">
+            <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(1); }} className="p-2 border rounded min-w-[180px]">
+              <option value="">All Statuses</option>
+              <option value="Published Running">Published Running</option>
+              <option value="Published">Published</option>
+              <option value="Draft">Draft</option>
+              <option value="Expired">Expired</option>
+            </select>
+            {/* Filter by State and City */}
             <select value={selectedState} onChange={e => { setSelectedState(e.target.value); setPage(1); }} className="p-2 border rounded min-w-[180px]">
               <option value="">All States</option>
               {Array.from(new Set(cities.map((c: any) => c.state))).map(stateCode => {
@@ -197,11 +216,22 @@ export const PublishCampaign: React.FC = () => {
               </tbody>
             </table>
           </div>
-          <div className="flex justify-between items-center mt-4">
-            <span>Page {page} of {Math.ceil(total / PAGE_SIZE)}</span>
+          <div className="flex justify-end items-center mt-4">
             <div className="flex gap-2">
-              <Button disabled={page === 1} onClick={() => setPage(page - 1)}>Previous</Button>
-              <Button disabled={page === Math.ceil(total / PAGE_SIZE)} onClick={() => setPage(page + 1)}>Next</Button>
+              <button
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg shadow hover:scale-105 transition-transform font-semibold text-lg disabled:opacity-50"
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+              >
+                Previous
+              </button>
+              <button
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg shadow hover:scale-105 transition-transform font-semibold text-lg disabled:opacity-50"
+                disabled={page === Math.ceil(total / PAGE_SIZE)}
+                onClick={() => setPage(page + 1)}
+              >
+                Next
+              </button>
             </div>
           </div>
           {/* Confirm Modal for Publish/Delete */}

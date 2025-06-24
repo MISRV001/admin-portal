@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Alert, AlertDescription } from './ui/alert';
 import { Edit, Trash2, Plus, Monitor, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { MockAPIService } from '../services/mockApiService';
+import { Button } from './ui/button';
 
 interface Placement {
   id: string;
@@ -365,35 +366,13 @@ export const AddPlacements: React.FC = () => {
                     </select>
                   </div>
 
-                  <div className="flex space-x-3">
+                  <div className="flex justify-end w-full mt-4">
                     <button
                       type="submit"
-                      disabled={isSubmitting}
-                      className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg shadow hover:scale-105 transition-transform font-semibold text-lg"
                     >
-                      {isSubmitting ? (
-                        <div className="flex items-center justify-center space-x-2">
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>{editingId ? 'Updating...' : 'Adding...'}</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center space-x-2">
-                          <Plus className="w-4 h-4" />
-                          <span>{editingId ? 'Update Placement' : 'Add Placement'}</span>
-                        </div>
-                      )}
+                      Add Placement
                     </button>
-                    
-                    {editingId && (
-                      <button
-                        type="button"
-                        onClick={resetForm}
-                        disabled={isSubmitting}
-                        className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
-                      >
-                        Cancel
-                      </button>
-                    )}
                   </div>
                 </form>
               </CardContent>

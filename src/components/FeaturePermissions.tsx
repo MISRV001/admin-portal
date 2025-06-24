@@ -164,25 +164,15 @@ export const FeaturePermissions: React.FC = () => {
               </AlertDescription>
             </Alert>
           )}
-          <div className="flex gap-4 mt-8">
-            <Button
+          <div className="flex justify-end w-full mt-4">
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg shadow hover:scale-105 transition-transform font-semibold text-lg"
               onClick={handleSave}
               disabled={saving || loading || (selectedRole === 'new' && !newRoleName)}
-              className="bg-blue-600 text-white"
             >
-              {saving ? 'Saving...' : 'Save Permission Changes'}
-            </Button>
-            {selectedRole === 'new' && (
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setNewRoleName('');
-                  setSelectedRole('admin');
-                }}
-              >
-                Cancel
-              </Button>
-            )}
+              {saving ? 'Saving...' : 'Save Permissions'}
+            </button>
           </div>
         </CardContent>
       </Card>
