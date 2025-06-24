@@ -9,70 +9,68 @@ import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
-const ALL_ROLES = [
-  { label: 'Admin', value: 'admin' },
-  { label: 'Campaign Manager', value: 'campaign_manager' },
-  { label: 'Report Analyst', value: 'reports_only' },
-  { label: 'POS-Admin', value: 'pos_admin' },
-  { label: 'Create New Role...', value: 'new' }
-];
-
-const ALL_FEATURES = [
-  { name: 'Email Invites', key: 'admin.users.manage', description: 'Invite users via email.' },
-  { name: 'Feature Permissions', key: 'admin.roles.manage', description: 'Manage feature access for roles.' },
-  { name: 'Add Users', key: 'admin.users.manage', description: 'Add new users to the system.' },
-  { name: 'Add Placements', key: 'admin.placements.manage', description: 'Add new ad placements.' },
-  { name: 'Create Campaign', key: 'campaigns.create', description: 'Create a new marketing campaign.' },
-  { name: 'Publish Campaign', key: 'campaigns.publish', description: 'Publish a campaign.' },
-  { name: 'Preview Campaign', key: 'campaigns.preview', description: 'Preview campaign details.' },
-  { name: 'POS Stores/Device', key: 'stores.manage', description: 'Manage POS stores and devices.' },
-  { name: 'Device Health', key: 'stores.health', description: 'Monitor device health.' },
-  { name: 'Report 1', key: 'reports.view_all', description: 'View all reports.' },
-];
-
 const PERMISSION_LEVELS = [
   { label: 'Edit-Access', value: 'edit' },
   { label: 'View-Only', value: 'view' },
   { label: 'No-Access', value: 'none' }
 ];
 
+interface SidebarRoute {
+  route: string;
+  name: string;
+  description: string;
+  group: string;
+}
+
+// Ensure all sidebar routes are present in the permissions table for the selected role
+const getRolePermissions = (rolePermissions: Record<string, string>, sidebarRoutes: string[]) => {
+  // Ensure all sidebar routes are present, default to 'view' if missing
+  return sidebarRoutes.map(route => ({
+    route,
+    permission: rolePermissions[route] || 'view',
+  }));
+};
+
 export const FeaturePermissions: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState('admin');
   const [newRoleName, setNewRoleName] = useState('');
-  const [permissions, setPermissions] = useState<{ [feature: string]: string }>({});
+  const [permissions, setPermissions] = useState<{ [route: string]: string }>({});
+  const [sidebarRoutes, setSidebarRoutes] = useState<SidebarRoute[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
-  // Fetch permissions for selected role
+  // Fetch sidebar routes and permissions for selected role
   useEffect(() => {
     setSuccess('');
     setError('');
-    if (selectedRole === 'new') {
-      setPermissions(Object.fromEntries(ALL_FEATURES.map(f => [f.key, 'none'])));
-      return;
-    }
     setLoading(true);
-    fetch('/mock/responses/admin-roles.json')
+    fetch('/mock/responses/sidebar-permissions.json')
       .then(res => res.json())
       .then(data => {
+        setSidebarRoutes(data.sidebar);
         const role = data.roles.find((r: any) => r.name === selectedRole);
         if (role) {
-          setPermissions({
-            ...Object.fromEntries(ALL_FEATURES.map(f => [f.key, 'none'])),
-            ...role.permissions
+          const perms: { [route: string]: string } = {};
+          data.sidebar.forEach((item: SidebarRoute) => {
+            perms[item.route] = role.permissions[item.route] || 'none';
           });
+          setPermissions(perms);
         } else {
-          setPermissions(Object.fromEntries(ALL_FEATURES.map(f => [f.key, 'none'])));
+          const perms: { [route: string]: string } = {};
+          data.sidebar.forEach((item: SidebarRoute) => {
+            perms[item.route] = 'none';
+          });
+          setPermissions(perms);
         }
       })
       .catch(() => setError('Failed to load permissions'))
       .finally(() => setLoading(false));
   }, [selectedRole]);
 
-  const handlePermissionChange = (featureKey: string, value: string) => {
-    setPermissions(prev => ({ ...prev, [featureKey]: value }));
+  const handlePermissionChange = (route: string, value: string) => {
+    setPermissions(prev => ({ ...prev, [route]: value }));
   };
 
   const handleSave = async () => {
@@ -82,7 +80,6 @@ export const FeaturePermissions: React.FC = () => {
     try {
       // Simulate API call
       await new Promise(res => setTimeout(res, 800));
-      // Here you would POST/PUT to your API or update your mock
       setSuccess('Permissions saved successfully!');
     } catch (e) {
       setError('Failed to save permissions');
@@ -90,6 +87,13 @@ export const FeaturePermissions: React.FC = () => {
       setSaving(false);
     }
   };
+
+  // Group sidebar routes by group
+  const groupedSidebar = sidebarRoutes.reduce((acc, item) => {
+    if (!acc[item.group]) acc[item.group] = [];
+    acc[item.group].push(item);
+    return acc;
+  }, {} as Record<string, SidebarRoute[]>);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 p-8">
@@ -102,12 +106,14 @@ export const FeaturePermissions: React.FC = () => {
             <Label htmlFor="role">Role:</Label>
             <Select value={selectedRole} onValueChange={setSelectedRole}>
               <SelectTrigger className="w-56">
-                {ALL_ROLES.find(r => r.value === selectedRole)?.label ?? ''}
+                {selectedRole}
               </SelectTrigger>
               <SelectContent>
-                {ALL_ROLES.map(role => (
-                  <SelectItem key={role.value} value={role.value}>{role.label}</SelectItem>
-                ))}
+                {/* You may want to fetch roles from the API for dynamic roles */}
+                <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="campaign_manager">Campaign Manager</SelectItem>
+                <SelectItem value="reports_only">Report Analyst</SelectItem>
+                <SelectItem value="pos_admin">POS-Admin</SelectItem>
               </SelectContent>
             </Select>
             {selectedRole === 'new' && (
@@ -123,38 +129,47 @@ export const FeaturePermissions: React.FC = () => {
             <Skeleton className="h-32 w-full" />
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full border">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="text-left p-2">Feature</th>
-                    <th className="text-left p-2">Description</th>
-                    <th className="text-left p-2">Permission</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ALL_FEATURES.map(feature => (
-                    <tr key={feature.key} className="border-t">
-                      <td className="p-2">{feature.name}</td>
-                      <td className="p-2 text-gray-500">{feature.description}</td>
-                      <td className="p-2">
-                        <Select
-                            value={permissions[feature.key] || 'none'}
-                            onValueChange={value => handlePermissionChange(feature.key, value)}
-                          >
-                            <SelectTrigger className="w-36">
-                              {PERMISSION_LEVELS.find(l => l.value === (permissions[feature.key] || 'none'))?.label ?? 'No-Access'}
-                            </SelectTrigger>
-                            <SelectContent>
-                              {PERMISSION_LEVELS.map(level => (
-                                <SelectItem key={level.value} value={level.value}>{level.label}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              {Object.entries(groupedSidebar).map(([group, items]) => (
+                <div key={group} className="mb-8">
+                  <div className="text-lg font-semibold text-purple-700 mb-2 mt-4">{group}</div>
+                  <div className="w-full">
+                    <table className="w-full border mb-2">
+                      <thead>
+                        <tr className="bg-gray-100">
+                          <th className="p-2 text-left align-middle">Name</th>
+                          <th className="p-2 text-left align-middle">Description</th>
+                          <th className="p-2 text-left align-middle">Route</th>
+                          <th className="p-2 text-left align-middle">Permission</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {items.map(item => (
+                          <tr key={item.route} className="border-t">
+                            <td className="p-2 text-left align-middle">{item.name}</td>
+                            <td className="p-2 text-left align-middle text-gray-500">{item.description}</td>
+                            <td className="p-2 text-left align-middle font-mono text-xs text-gray-500">{item.route}</td>
+                            <td className="p-2 text-left align-middle">
+                              <Select
+                                value={permissions[item.route] || 'none'}
+                                onValueChange={value => handlePermissionChange(item.route, value)}
+                              >
+                                <SelectTrigger className="w-36">
+                                  {PERMISSION_LEVELS.find(l => l.value === (permissions[item.route] || 'none'))?.label ?? 'No-Access'}
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {PERMISSION_LEVELS.map(level => (
+                                    <SelectItem key={level.value} value={level.value}>{level.label}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
           {(success || error) && (

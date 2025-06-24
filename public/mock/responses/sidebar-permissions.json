@@ -1,0 +1,116 @@
+{
+  "sidebar": [
+    { "route": "/", "name": "Dashboard", "description": "Overview of key metrics and quick links.", "group": "Admin" },
+    { "route": "/addusers", "name": "Add Users", "description": "Add and manage user accounts.", "group": "Admin" },
+    { "route": "/featurepermissions", "name": "Feature Permissions", "description": "Manage feature access for roles.", "group": "Admin" },
+    { "route": "/addplacements", "name": "Add Placements", "description": "Add and manage ad placements.", "group": "Campaign Management" },
+    { "route": "/createcampaign", "name": "Create Campaign", "description": "Create a new marketing campaign.", "group": "Campaign Management" },
+    { "route": "/publishcampaign", "name": "Publish Campaign", "description": "Publish and manage campaign status.", "group": "Campaign Management" },
+    { "route": "/previewcampaign", "name": "Preview Campaign", "description": "Preview campaign details and creatives.", "group": "Campaign Management" },
+    { "route": "/campaignconditions", "name": "Campaign Conditions", "description": "Set campaign targeting and conditions.", "group": "Campaign Management" },
+    { "route": "/posstoresdevice", "name": "POS Stores/Device", "description": "Manage POS stores and devices.", "group": "Store Management" },
+    { "route": "/devicehealth", "name": "Device Health", "description": "Monitor device health and status.", "group": "Store Management" },
+    { "route": "/report1", "name": "Campaign Report", "description": "View campaign performance report.", "group": "Reports" },
+    { "route": "/report2", "name": "Store Performance Report", "description": "View store performance analytics.", "group": "Reports" },
+    { "route": "/report3", "name": "Device Health Report", "description": "View device health analytics.", "group": "Reports" },
+    { "route": "/networksimulator", "name": "Network Simulator", "description": "Simulate and test network conditions.", "group": "Admin" },
+    { "route": "/apimodeselector", "name": "API Mode Selector", "description": "Switch API modes for testing.", "group": "Admin" },
+    { "route": "/stores", "name": "Stores", "description": "Manage store locations and details.", "group": "Store Management" },
+    { "route": "/reports", "name": "Reports", "description": "Access all analytics and reports.", "group": "Reports" },
+    { "route": "/settings", "name": "Settings", "description": "Configure application settings.", "group": "Admin" }
+  ],
+  "roles": [
+    {
+      "name": "admin",
+      "permissions": {
+        "/": "edit",
+        "/addusers": "edit",
+        "/featurepermissions": "edit",
+        "/addplacements": "edit",
+        "/createcampaign": "edit",
+        "/publishcampaign": "edit",
+        "/previewcampaign": "view",
+        "/campaignconditions": "edit",
+        "/posstoresdevice": "edit",
+        "/devicehealth": "view",
+        "/report1": "view",
+        "/report2": "view",
+        "/report3": "view",
+        "/networksimulator": "edit",
+        "/apimodeselector": "edit",
+        "/stores": "edit",
+        "/reports": "view",
+        "/settings": "edit"
+      }
+    },
+    {
+      "name": "campaign_manager",
+      "permissions": {
+        "/": "view",
+        "/addusers": "none",
+        "/featurepermissions": "none",
+        "/addplacements": "edit",
+        "/createcampaign": "edit",
+        "/publishcampaign": "edit",
+        "/previewcampaign": "view",
+        "/campaignconditions": "none",
+        "/posstoresdevice": "none",
+        "/devicehealth": "none",
+        "/report1": "view",
+        "/report2": "view",
+        "/report3": "view",
+        "/networksimulator": "none",
+        "/apimodeselector": "none",
+        "/stores": "none",
+        "/reports": "view",
+        "/settings": "none"
+      }
+    },
+    {
+      "name": "reports_only",
+      "permissions": {
+        "/": "view",
+        "/addusers": "none",
+        "/featurepermissions": "none",
+        "/addplacements": "none",
+        "/createcampaign": "none",
+        "/publishcampaign": "none",
+        "/previewcampaign": "none",
+        "/campaignconditions": "none",
+        "/posstoresdevice": "none",
+        "/devicehealth": "none",
+        "/report1": "view",
+        "/report2": "view",
+        "/report3": "view",
+        "/networksimulator": "none",
+        "/apimodeselector": "none",
+        "/stores": "none",
+        "/reports": "view",
+        "/settings": "none"
+      }
+    },
+    {
+      "name": "pos_admin",
+      "permissions": {
+        "/": "view",
+        "/addusers": "none",
+        "/featurepermissions": "none",
+        "/addplacements": "edit",
+        "/createcampaign": "none",
+        "/publishcampaign": "none",
+        "/previewcampaign": "none",
+        "/campaignconditions": "none",
+        "/posstoresdevice": "edit",
+        "/devicehealth": "edit",
+        "/report1": "view",
+        "/report2": "view",
+        "/report3": "view",
+        "/networksimulator": "none",
+        "/apimodeselector": "none",
+        "/stores": "edit",
+        "/reports": "view",
+        "/settings": "none"
+      }
+    }
+  ]
+}

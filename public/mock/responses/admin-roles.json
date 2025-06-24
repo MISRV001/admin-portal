@@ -23,7 +23,11 @@
         "devicehealth": "view",
         "report1": "view",
         "report2": "view",
-        "report3": "view"
+        "report3": "view",
+        "dashboard": "edit",
+        "networksimulator": "edit",
+        "apimodeselector": "edit",
+        "settings": "edit"
       }
     },
     {
@@ -38,7 +42,8 @@
         "previewcampaign": "view",
         "report1": "view",
         "report2": "view",
-        "report3": "view"
+        "report3": "view",
+        "dashboard": "edit"
       }
     },
     {
@@ -61,7 +66,8 @@
         "reports.view_all": "view",
         "report1": "view",
         "report2": "view",
-        "report3": "view"
+        "report3": "view",
+        "dashboard": "edit"
       }
     }
   ]
