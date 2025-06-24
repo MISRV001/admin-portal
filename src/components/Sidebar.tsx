@@ -3,12 +3,12 @@ import { useRouter } from 'next/router';
 import { ChevronDown, ChevronRight, Menu, X, User, LogOut } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 import { useNavigationStore } from '../stores/navigationStore';
-import { getNavigationItems } from '../utils/roleBasedNavigation';
+import { useNavigationItems } from '../utils/roleBasedNavigation';
 
 interface CollapsibleMenuItemProps {
   title: string;
   icon: React.ReactNode;
-  children: { name: string; icon: React.ReactNode }[];
+  children: { name: string; icon: React.ReactNode; route: string }[];
   isCollapsed: boolean;
   isMobile?: boolean;
 }
@@ -22,14 +22,8 @@ const CollapsibleMenuItem: React.FC<CollapsibleMenuItemProps> = ({
 }) => {
   const router = useRouter();
 
-  // Helper to get route from page name
-  const getRoute = (pageName: string) => {
-    if (pageName === 'Dashboard') return '/';
-    return `/${pageName.toLowerCase().replace(/\s+/g, '')}`;
-  };
-
   // Determine if any child is active
-  const isAnyChildActive = children.some(child => getRoute(child.name) === router.asPath);
+  const isAnyChildActive = children.some(child => child.route === router.asPath);
 
   // Open if any child is active
   const [isOpen, setIsOpen] = useState(isAnyChildActive);
@@ -67,12 +61,11 @@ const CollapsibleMenuItem: React.FC<CollapsibleMenuItemProps> = ({
       {isOpen && (
         <div className="pl-8 space-y-1">
           {children.map(child => {
-            const route = getRoute(child.name);
-            const isActive = router.asPath === route;
+            const isActive = router.asPath === child.route;
             return (
               <button
-                key={child.name}
-                onClick={() => router.push(route)}
+                key={child.route}
+                onClick={() => router.push(child.route)}
                 className={`w-full flex items-center p-2 rounded-lg transition-colors ${
                   isActive
                     ? 'bg-blue-100 text-blue-700 font-semibold'
@@ -94,8 +87,33 @@ export const Sidebar: React.FC = () => {
   const { sidebarCollapsed, mobileMenuOpen, toggleSidebar, closeMobileMenu } = useNavigationStore();
   const { user, logout } = useAuthStore();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [sidebarPermissions, setSidebarPermissions] = useState<Record<string, string>>({});
 
-  const navigationItems = user ? getNavigationItems(user.role, user.permissions) : [];
+  useEffect(() => {
+    async function fetchSidebarPermissions() {
+      if (!user) return;
+      try {
+        const res = await fetch('/mock/responses/sidebar-permissions.json');
+        const data = await res.json();
+        const role = data.roles.find((r: any) => r.name === user.role);
+        if (role && role.permissions) {
+          setSidebarPermissions(role.permissions);
+          console.log('[SIDEBAR DEBUG] Loaded sidebar-permissions.json permissions for role', user.role, role.permissions);
+        } else {
+          setSidebarPermissions({});
+          console.log('[SIDEBAR DEBUG] No permissions found for role', user.role);
+        }
+      } catch (e) {
+        setSidebarPermissions({});
+        console.error('[SIDEBAR DEBUG] Failed to load sidebar-permissions.json', e);
+      }
+    }
+    fetchSidebarPermissions();
+  }, [user]);
+
+  // Use navigationItems hook, but wait for user to be defined
+  const navigationItems = useNavigationItems(user?.role || 'admin', sidebarPermissions);
+  console.log('[SIDEBAR DEBUG] navigationItems:', navigationItems);
 
   const DesktopSidebar = () => (
     <div className={`hidden lg:flex bg-white h-screen shadow-lg transition-all duration-300 flex-col ${sidebarCollapsed ? 'w-16' : 'w-80'}`}>
